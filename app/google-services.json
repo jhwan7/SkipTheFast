@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "953291752105",
+    "firebase_url": "https://test-projec-5a491.firebaseio.com",
+    "project_id": "test-projec-5a491",
+    "storage_bucket": "test-projec-5a491.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953291752105:android:5aa7ee58818ed50d7f1fb8",
+        "android_client_info": {
+          "package_name": "com.example.skipthefast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "953291752105-v68hm79irdtlq4vaqo13j6apqa3lri5p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_gHfYAclNvu7zlNpXZvjdlYegRXsYvRc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953291752105-v68hm79irdtlq4vaqo13j6apqa3lri5p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
