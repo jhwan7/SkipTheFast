@@ -4,6 +4,10 @@
     <string name="tab_text_2">Calendar</string>
     <string name="tab_text_3">Analytics</string>
 
+    <string name="form_tab_1">Food</string>
+    <string name="form_tab_2">Emotion</string>
+    <string name="form_tab_3">Exercise</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_journey">Hello This Is Journey</string>
 

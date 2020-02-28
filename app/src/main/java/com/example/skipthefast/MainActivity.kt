@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         val fab: FloatingActionButton = findViewById(R.id.fab)
 
         fab.setOnClickListener {
-            val intent = Intent(this, FeelingActivity::class.java)
+            val intent = Intent(this, FormActivity::class.java)
             startActivity(intent)
         }
     }

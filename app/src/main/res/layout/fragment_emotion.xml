@@ -1,58 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00BCD4"
-    tools:context=".FeelingActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".EmotionFragment">
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/happyBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/circle_white"
-        android:text="Button"
-        app:layout_constraintCircle="@+id/pivot"
-        app:layout_constraintCircleAngle="45"
-        app:layout_constraintCircleRadius="150dp" />
-
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/circle_white"
-        android:text="Button"
+        android:text="HAPPY"
         app:layout_constraintCircle="@+id/pivot"
         app:layout_constraintCircleAngle="0"
         app:layout_constraintCircleRadius="150dp" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/gladBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/circle_white"
-        android:text="Button"
+        android:text="GLAD"
+        app:layout_constraintCircle="@+id/pivot"
+        app:layout_constraintCircleAngle="45"
+        app:layout_constraintCircleRadius="150dp" />
+    <Button
+        android:id="@+id/mehBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle_white"
+        android:text="MEH"
         app:layout_constraintCircle="@+id/pivot"
         app:layout_constraintCircleAngle="90"
         app:layout_constraintCircleRadius="150dp" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/sadBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/circle_white"
-        android:text="Button"
+        android:text="SAD"
         app:layout_constraintCircle="@+id/pivot"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="150dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/miserableBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/circle_white"
-        android:text="Button"
+        android:text="MISERABLE"
         app:layout_constraintCircle="@+id/pivot"
         app:layout_constraintCircleAngle="180"
         app:layout_constraintCircleRadius="150dp" />
@@ -90,4 +88,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.6" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
