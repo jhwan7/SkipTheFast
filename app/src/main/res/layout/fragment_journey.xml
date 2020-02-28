@@ -113,11 +113,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/card_food" />
+            <include layout="@layout/card_summary" />
 
-            <include layout="@layout/card_food" />
+            <include layout="@layout/card_summary" />
 
-            <include layout="@layout/card_food" />
+            <include layout="@layout/card_summary" />
 
         </LinearLayout>
     </LinearLayout>

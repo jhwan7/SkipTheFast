@@ -1,12 +1,17 @@
 package com.example.skipthefast
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.example.skipthefast.Message.Communicator
 import kotlinx.android.synthetic.main.fragment_emotion.*
+import java.lang.RuntimeException
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,6 +34,16 @@ class EmotionFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val model= ViewModelProviders.of(activity!!).get(Communicator::class.java)
+
+        model.chain.observe(this, object: Observer<Any> {
+            override fun onChanged(t: Any?) {
+                Log.d("emotion fragment: ", "received " + t!!.toString())
+            }
+        })
+
         happyBtn.setOnClickListener{ view ->
             Log.d("happy button", "clicked")
         }

@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.lifecycle.ViewModelProviders
+import com.example.skipthefast.Message.Communicator
 import kotlinx.android.synthetic.main.fragment_select_food.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -21,6 +23,8 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class SelectFoodFragment : Fragment() {
+    private var model: Communicator?=null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,6 +35,8 @@ class SelectFoodFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        model= ViewModelProviders.of(activity!!).get(Communicator::class.java)
 
         val foodChains = arrayOf("MC","BK","WEN","SUB")
         val categories =  arrayOf("meat","fish","burger","sandwich")
@@ -49,6 +55,7 @@ class SelectFoodFragment : Fragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
                 Log.i("Form", foodChains[position])
+                model!!.setChainCommunicator(foodChains[position])
             }
         }
         category.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
