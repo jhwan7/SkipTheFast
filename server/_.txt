@@ -1,0 +1,77 @@
+import pyrebase
+from getpass import getpass
+
+firebaseConfig = {
+    "apiKey": "AIzaSyAxPJMK8k_AXhvzDc9j4nMiNad2DV-lQWw",
+    "authDomain": "test-projec-5a491.firebaseapp.com",
+    "databaseURL": "https://test-projec-5a491.firebaseio.com",
+    "projectId": "test-projec-5a491",
+    "storageBucket": "test-projec-5a491.appspot.com",
+    "messagingSenderId": "953291752105",
+    "appId": "1:953291752105:web:ecfa54ea190feddf7f1fb8",
+    "measurementId": "G-HJZKBZLEKP"
+}
+
+firebase = pyrebase.initialize_app(firebaseConfig)
+
+auth = firebase.auth()
+
+email = input('email\n')
+pw = getpass('pw\n')
+
+#user = auth.create_user_with_email_and_password(email, pw)
+# test1234
+#https://www.youtube.com/watch?v=rKuGCQda_Qo
+login = auth.sign_in_with_email_and_password(email, pw)
+#auth.send_email_verification()
+#auth.send_password_reset_email()
+import requests
+
+# importing the requests library
+import requests
+
+# api-endpoint
+URL = "http://localhost:5000/"
+
+fbTest = requests.get(url='ç', params={'test2':'test from backend'})
+fbPut = requests.put(url='https://test-projec-5a491.firebaseio.com/users.json', data='{"id":"password2"}' )
+print(fbPut.text)
+print(fbTest.text)
+# location given here
+test = "test"
+
+# defining a params dict for the parameters to be sent to the API
+PARAMS = {'test': test}
+
+# sending get request and saving the response as response object
+r = requests.get(url=URL, params=PARAMS)
+
+print(r.text)
+# extracting data in json format
+#data = r.json()
+
+# extracting latitude, longitude and formatted address
+# of the first matching location
+"""
+    latitude = data['results'][0]['geometry']['location']['lat']
+longitude = data['results'][0]['geometry']['location']['lng']
+formatted_address = data['results'][0]['formatted_address']
+
+# printing the output
+print("Latitude:%s\nLongitude:%s\nFormatted Address:%s" % (latitude, longitude, formatted_address))
+"""
+
+print('!')
+
+"""
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    }
+  }
+}
+"""
