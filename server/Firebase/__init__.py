@@ -1,3 +1,4 @@
 # __init__.py
-
-firebase = pyrebase.initialize_app(firebaseConfig)
+from CONST import FB_CONFIG
+import pyrebase
+firebase = pyrebase.initialize_app(FB_CONFIG)

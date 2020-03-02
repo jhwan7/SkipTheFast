@@ -1,8 +1,9 @@
 from __init__ import firebase
+from getpass import getpass
 
 status = {
-    logged: False,
-    user: None
+    'logged': False,
+    'user': None
 }
 
 auth = firebase.auth()
@@ -35,3 +36,8 @@ def send_pw_reset_email(email):
 #login = auth.sign_in_with_email_and_password(email, pw)
 # auth.send_email_verification()
 # auth.send_password_reset_email()
+if __name__ == '__main__':
+    email = input('Enter Email\n')
+    pw = getpass('Enter Password\n')
+    res = sign_in(email, pw)
+    print(res)

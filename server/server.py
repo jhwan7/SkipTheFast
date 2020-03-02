@@ -34,3 +34,6 @@ def get_image():
     else:
        filename = 'error.gif'
     return send_file(filename, mimetype='image/gif')"""
+    
+
+# curl -X PUT -d '{ "Food Chain": "Subway", "Category": "Sandwitch", "Item":"Pizza Sub", "Price":"14.56", "Feeling": "7" }' \ 'https://test-projec-5a491.firebaseio.com"/records/jeongwon412@gmail.com.json'
