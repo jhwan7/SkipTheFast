@@ -7,19 +7,19 @@ class FBServer {
     private val client = OkHttpClient()
 
     fun connect(url: String) {
-        val request = Request.Builder()
-            .url(url)
-            .build()
-        println("CONNECTING")
+        val request = Request.Builder().url(url).build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                println("FAILED")
+                print("FAILED CALL ON ")
+                println(url)
                 println(e)
             }
             override fun onResponse(call: Call, response: Response) {
-                println("Successfull"+response.body()?.string())
+                print("Successful call on ")
+                println(url)
+                println(response.body()?.string())
             }
         })
-        println("CONNECTED??")
+
     }
 }
