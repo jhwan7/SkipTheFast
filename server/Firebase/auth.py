@@ -1,5 +1,6 @@
 from __init__ import firebase
 from getpass import getpass
+import sys
 
 status = {
     'logged': False,
@@ -7,7 +8,6 @@ status = {
 }
 
 auth = firebase.auth()
-
 
 class UnableToLogInException(Exception):
     pass
@@ -30,14 +30,20 @@ def send_pw_reset_email(email):
     res = auth.send_password_reset_email(email)
     return res
 
-
 # test1234
 # https://www.youtube.com/watch?v=rKuGCQda_Qo
-#login = auth.sign_in_with_email_and_password(email, pw)
+# login = auth.sign_in_with_email_and_password(email, pw)
 # auth.send_email_verification()
 # auth.send_password_reset_email()
+
 if __name__ == '__main__':
-    email = input('Enter Email\n')
-    pw = getpass('Enter Password\n')
-    res = sign_in(email, pw)
-    print(res)
+    if len(sys.argv) == 2 and sys.argv[1] == '-c':
+        email = input('Enter Email\n')
+        pw = getpass('Enter Password\n')
+        res = create_user(email, pw)
+        print(res)
+    else:
+        email = input('Enter Email\n')
+        pw = getpass('Enter Password\n')
+        res = sign_in(email, pw)
+        print(res)

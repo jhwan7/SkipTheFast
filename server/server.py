@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_file
 # import Firebase
 
 app = Flask(__name__)
@@ -16,6 +16,10 @@ def test():
 def post_example():
     print(request.get_data())
     return "some return"
+
+@app.route('/get_image')
+def send_img():
+    return send_file('test.png')
 
 
 if __name__ == "__main__":

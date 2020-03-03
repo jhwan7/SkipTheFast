@@ -10,4 +10,4 @@ FB_CONFIG = {
     "measurementId": "G-HJZKBZLEKP"
 }
 
-FB_RECORDS_ENDPOINT = 'https://test-projec-5a491.firebaseio.com/users.json'
+FB_RECORDS_ENDPOINT = 'https://test-projec-5a491.firebaseio.com/records/'
