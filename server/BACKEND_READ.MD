@@ -7,10 +7,13 @@ USER (user.json)
 - user password
 
 USER DATA
-- user
-- Food chain
-- Category
-- Item
-- Price
-- Current feeling
+- user_id (temporary -- name)
+- - Food chain
+- - Category
+- - Item
+- - Price
+- - Current feeling
+- - Time
 
+AUTHENTICATION
+- email, pw -> user_id
