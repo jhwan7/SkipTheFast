@@ -85,3 +85,6 @@ lint/tmp/
 # lint/reports/
 venv/
 .DS_Store
+__pycache__/
+.vscode/
+
