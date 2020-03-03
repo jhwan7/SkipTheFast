@@ -2,6 +2,7 @@ import requests
 from CONST import URL, FB_CONFIG, FB_RECORDS_ENDPOINT
 from auth import *
 from __init__ import firebase
+import datetime
 
 db = firebase.database()
 """
@@ -29,11 +30,13 @@ def get_records(email, pw):
 
 def push_record(email, pw, record={ "Food Chain": "Subway", "Category": "Sandwitch", "Item":"Pizza Sub", "Price":"14.56", "Feeling": "7" }):
     data = {
-      'email':email,
+      'time': str(datetime.datetime.now()),
       'record': record
     }
     res = sign_in(email, pw)
-    db.child('records').push(data)
+    #db.child('records').child('mathieu').set(data
+    db.child('records').child('mathieu').push(record)
+    
     return res
     
 #print(get_records('jeongwon412@gmail.com', 'test1234').text)
