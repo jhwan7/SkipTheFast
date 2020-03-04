@@ -5,7 +5,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.firebase.database.*
-import okhttp3.*
+//import okhttp3.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 //import java.io.IOException
@@ -51,6 +51,20 @@ class FBServer {
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
             }
         }
+        //        ref = FirebaseDatabase.getInstance().getReference("records/mathieu")
+//        ref.addValueEventListener(object: ValueEventListener {
+//            override fun onCancelled(p0: DatabaseError){
+//                TODO("not implemented")
+//            }
+//
+//            override fun onDataChange(p0: DataSnapshot) {
+//                if(p0!!.exists()){
+//                   for(h in p0.children){
+//                       println(h.value)
+//                   }
+//                }
+//            }
+//        })
         database.addValueEventListener(recordLister)
     }
 

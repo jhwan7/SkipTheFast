@@ -32,19 +32,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        ref = FirebaseDatabase.getInstance().getReference("records/mathieu")
-        ref.addValueEventListener(object: ValueEventListener {
-            override fun onCancelled(p0: DatabaseError){
-                TODO("not implemented")
-            }
 
-            override fun onDataChange(p0: DataSnapshot) {
-                if(p0!!.exists()){
-                   for(h in p0.children){
-                       println(h.value)
-                   }
-                }
-            }
-        })
+
     }
 }
