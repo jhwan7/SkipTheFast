@@ -1,6 +1,8 @@
 package com.example.skipthefast.server
 
+import android.content.ContentValues.TAG
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.firebase.database.*
 import okhttp3.*
@@ -37,7 +39,19 @@ class FBServer {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getRecords(user:String){
-        // TODO('implements')
+    fun getRecords(user:String) {
+        val recordLister = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val record = dataSnapshot.getValue(Entry::class.java)
+                // TODO('RETURN RECORD!!!')
+                Log.w( record.toString(),"Returned record froms FB")
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
+            }
+        }
+        database.addValueEventListener(recordLister)
     }
+
 }
