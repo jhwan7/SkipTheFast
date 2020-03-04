@@ -5,6 +5,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.firebase.database.*
+import java.lang.Exception
 //import okhttp3.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -34,6 +35,9 @@ class FBServer {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun writeEntry(user: String, category: String, feeling: Int, foodChain: String, item: String, price: Double){
+        if(feeling>5 || feeling >0){
+            throw Exception("feeling greater than 5 or less than 0")
+        }
         val entry = Entry(getTime(), category, feeling, foodChain, item, price)
         database.child("records").child(user).push().setValue(entry)
     }
