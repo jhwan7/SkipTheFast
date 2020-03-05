@@ -11,3 +11,5 @@ FB_CONFIG = {
 }
 
 FB_RECORDS_ENDPOINT = 'https://test-projec-5a491.firebaseio.com/records/'
+
+DIAGRAM_TYPES = ['plot']

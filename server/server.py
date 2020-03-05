@@ -1,4 +1,10 @@
 from flask import Flask, request, send_file
+from firebase import Firebase
+from diagram import Diagram
+import CONST
+
+fb_server = Firebase(CONST.FB_CONFIG)
+diagram = Diagram(type='plot')
 
 app = Flask(__name__)
 
@@ -18,8 +24,9 @@ def post_example():
     return "some return"
 
 @app.route('/get_image')
-def send_img():
-    return send_file('test.png')
+def get_img():
+    diagram.plot([1, 1, 1], [0, 0, 0])
+    return send_file('tmp.png')
 
 
 if __name__ == "__main__":

@@ -1,13 +1,24 @@
 import datetime
-import pyrebase
+from pyrebase import pyrebase
+import CONST
 
 
 class UnableToLogInException(Exception):
     pass
 
 
+class AttemptToDuplicateFirebase(Exception):
+    pass
+
+
 class Firebase:
+    instance = None
+
     def __init__(self, fb_config):
+        if Firebase.instance is not None:
+            raise AttemptToDuplicateFirebase
+        else:
+            Firebase.instance = self
         self.firebase = pyrebase.initialize_app(fb_config)
         self.db = self.firebase.database()
         self.auth = self.firebase.auth()
@@ -64,6 +75,8 @@ if __name__ == '__main__':
         "Feeling": 7,
         "time": str(datetime.datetime.now())
     }
+    fb = Firebase(CONST.FB_CONFIG)
+    print(fb.get_records('jeongwon412@gmail.com', 'test1234'))
 
     # res = get_records('jeongwon412@uwo.ca', 'test1234')
     # res = push_record('jeongwon412@gmail.com', 'test1234', test_record)
