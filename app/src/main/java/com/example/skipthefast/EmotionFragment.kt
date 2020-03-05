@@ -23,7 +23,10 @@ private const val ARG_PARAM2 = "param2"
  * Use the [EmotionFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class EmotionFragment : Fragment() {
+class EmotionFragment(formActivity: Context) : Fragment() {
+
+    private var model: Communicator?=null
+    private var formActivity: FormActivity = formActivity as FormActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,28 +39,27 @@ class EmotionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val model= ViewModelProviders.of(activity!!).get(Communicator::class.java)
-
-        model.chain.observe(this, object: Observer<Any> {
-            override fun onChanged(t: Any?) {
-                Log.d("emotion fragment: ", "received " + t!!.toString())
-            }
-        })
+        model= ViewModelProviders.of(activity!!).get(Communicator::class.java)
 
         happyBtn.setOnClickListener{ view ->
-            Log.d("happy button", "clicked")
+            model!!.setEmotionCommunicator("happy")
+            formActivity.nextTab()
         }
         gladBtn.setOnClickListener{ view ->
-            Log.d("glad button", "clicked")
+            model!!.setEmotionCommunicator("glad")
+            formActivity.nextTab()
         }
         mehBtn.setOnClickListener{ view ->
-            Log.d("meh button", "clicked")
+            model!!.setEmotionCommunicator("meh")
+            formActivity.nextTab()
         }
         sadBtn.setOnClickListener{ view ->
-            Log.d("sad button", "clicked")
+            model!!.setEmotionCommunicator("sad")
+            formActivity.nextTab()
         }
         miserableBtn.setOnClickListener{ view ->
-            Log.d("miserable button", "clicked")
+            model!!.setEmotionCommunicator("miserable")
+            formActivity.nextTab()
         }
     }
 }
