@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.skipthefast.Data.UserSurvey
 import com.example.skipthefast.Message.Communicator
 import kotlinx.android.synthetic.main.fragment_emotion.*
 import java.lang.RuntimeException
@@ -28,6 +29,8 @@ class EmotionFragment(formActivity: Context) : Fragment() {
     private var model: Communicator?=null
     private var formActivity: FormActivity = formActivity as FormActivity
 
+    private var userInput: UserSurvey = UserSurvey()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,22 +46,27 @@ class EmotionFragment(formActivity: Context) : Fragment() {
 
         happyBtn.setOnClickListener{ view ->
             model!!.setEmotionCommunicator("happy")
+            userInput.emotion = "happy"
             formActivity.nextTab()
         }
         gladBtn.setOnClickListener{ view ->
             model!!.setEmotionCommunicator("glad")
+            userInput.emotion = "glad"
             formActivity.nextTab()
         }
         mehBtn.setOnClickListener{ view ->
             model!!.setEmotionCommunicator("meh")
+            userInput.emotion = "meh"
             formActivity.nextTab()
         }
         sadBtn.setOnClickListener{ view ->
             model!!.setEmotionCommunicator("sad")
+            userInput.emotion = "sad"
             formActivity.nextTab()
         }
         miserableBtn.setOnClickListener{ view ->
             model!!.setEmotionCommunicator("miserable")
+            userInput.emotion = "miserable"
             formActivity.nextTab()
         }
     }
