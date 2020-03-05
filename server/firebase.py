@@ -1,5 +1,5 @@
 import datetime
-from pyrebase import pyrebase
+import pyrebase
 import CONST
 
 

@@ -25,7 +25,8 @@ def post_example():
 
 @app.route('/get_image')
 def get_img():
-    diagram.plot([1, 1, 1], [0, 0, 0])
+    records = fb_server.get_records('jeongwon412@gmail.com', 'test1234')
+    diagram.plot(records)
     return send_file('tmp.png')
 
 
