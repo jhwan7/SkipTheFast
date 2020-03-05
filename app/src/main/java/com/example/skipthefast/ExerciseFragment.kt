@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.skipthefast.Data.UserActivity
+import com.example.skipthefast.Data.UserSurvey
 import com.example.skipthefast.Message.Communicator
 import kotlinx.android.synthetic.main.fragment_exercise.*
 
@@ -22,7 +22,7 @@ class ExerciseFragment(formActivity: Context) : Fragment() {
     private var model: Communicator?=null
     private var formActivity: FormActivity = formActivity as FormActivity
 
-    private var userInput: UserActivity = UserActivity()
+    private var userInput: UserSurvey = UserSurvey()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

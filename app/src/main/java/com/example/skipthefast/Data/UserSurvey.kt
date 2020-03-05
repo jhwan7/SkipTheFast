@@ -1,6 +1,6 @@
 package com.example.skipthefast.Data
 
-class UserActivity{
+class UserSurvey{
     public var chain: String = ""
     public var category: String = ""
     public var item: String = ""

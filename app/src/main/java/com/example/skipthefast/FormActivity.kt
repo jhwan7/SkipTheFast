@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.viewpager.widget.ViewPager
-import com.example.skipthefast.Data.UserActivity
+import com.example.skipthefast.Data.UserSurvey
 import com.example.skipthefast.ui.main.FormsPagerAdapter
 import com.google.android.material.tabs.TabLayout
 
@@ -29,7 +29,7 @@ class FormActivity : AppCompatActivity() {
         }
     }
 
-    fun closeActivity(userInput: UserActivity) {
+    fun closeActivity(userInput: UserSurvey) {
         val returnIntent = Intent()
         returnIntent.putExtra("chain", userInput.chain)
         returnIntent.putExtra("emotion", userInput.emotion)

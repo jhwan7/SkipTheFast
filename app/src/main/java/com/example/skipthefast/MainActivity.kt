@@ -5,18 +5,28 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import com.example.skipthefast.ui.main.SectionsPagerAdapter
+import com.example.skipthefast.Data.UserSurvey
+import com.example.skipthefast.ui.main.MainPagerAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
     private val LAUNCH_FORM_ACTIVITY: Int = 1
 
+    interface ListenFromActivity {
+        fun populateCard(userInput: UserSurvey)
+    }
+
+    lateinit var mainListener: ListenFromActivity
+
+    fun setActivityListener(mainListener: ListenFromActivity) {
+        this.mainListener = mainListener;
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
+        val sectionsPagerAdapter = MainPagerAdapter(this, supportFragmentManager)
         val viewPager: ViewPager = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = findViewById(R.id.tabs)
@@ -34,8 +44,15 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == LAUNCH_FORM_ACTIVITY) {
             if (resultCode == Activity.RESULT_OK) {
-                println("Main Activity Received: " + data?.getStringExtra("chain"))
+                val userInput = UserSurvey()
+                userInput.chain = data?.getStringExtra("chain").toString()
+                userInput.emotion = data?.getStringExtra("emotion").toString()
+                userInput.exercise = data?.getStringExtra("exercise").toString()
+
+                mainListener.populateCard(userInput)
             }
         }
     }
+
+
 }
