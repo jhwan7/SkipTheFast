@@ -114,9 +114,6 @@
             android:orientation="vertical">
 
             <include layout="@layout/card_summary" />
-
-            <include layout="@layout/card_summary" />
-
             <include layout="@layout/card_summary" />
 
         </LinearLayout>
