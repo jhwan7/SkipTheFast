@@ -85,20 +85,17 @@ class Card(context: Context, userSurvey: UserSurvey) {
         exerciseImage.layoutParams = imageParams
         exerciseImage.adjustViewBounds = true
 
-        /*
-        FOR EHWAN: Similar to sample code below, find image online and attach to the image
-        depending on userSurvey.exercise == run or walk or bike or breathe
-        if (userSurvey.emotion == "happy") {
-            emotionImage.setImageResource(R.drawable.emotion_happy)
-        } else if (userSurvey.emotion == "glad") {
-            emotionImage.setImageResource(R.drawable.emotion_smile)
-        } else if (userSurvey.emotion == "meh") {
-            emotionImage.setImageResource(R.drawable.emotion_meh)
+        if (userSurvey.exercise == "run") {
+            exerciseImage.setImageResource(R.drawable.exercise_run)
+        } else if (userSurvey.exercise == "walk") {
+            exerciseImage.setImageResource(R.drawable.exercise_walk)
+        } else if (userSurvey.exercise == "bike") {
+            exerciseImage.setImageResource(R.drawable.exercise_bike)
+        } else if (userSurvey.exercise == "breathe") {
+            exerciseImage.setImageResource(R.drawable.exercise_breathe)
         } else {
-            emotionImage.setImageResource(R.drawable.emotion_sad)
+            exerciseImage.setImageResource(R.drawable.exercise_run)
         }
-        */
-        exerciseImage.setImageResource(R.drawable.exercise_bike)
 
         childContainer.layoutParams = childContainerParams
         childContainer.orientation = LinearLayout.VERTICAL
@@ -107,7 +104,6 @@ class Card(context: Context, userSurvey: UserSurvey) {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
-
 
         dateText.layoutParams = textParams
         dateText.text = "Feb 12, 2020"
