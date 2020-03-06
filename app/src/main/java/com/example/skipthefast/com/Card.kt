@@ -1,8 +1,6 @@
 package com.example.skipthefast.com
 
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.Typeface
 import android.view.ViewGroup
@@ -13,6 +11,7 @@ import android.widget.TextView
 import com.example.skipthefast.Data.UserSurvey
 import com.example.skipthefast.R
 import com.google.android.material.card.MaterialCardView
+import java.text.SimpleDateFormat
 
 
 class Card(context: Context, userSurvey: UserSurvey) {
@@ -112,7 +111,8 @@ class Card(context: Context, userSurvey: UserSurvey) {
         )
 
         dateText.layoutParams = textParams
-        dateText.text = "Feb 12, 2020"
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
+        dateText.text = formatter.format(userSurvey.date)
         dateText.setTextColor(Color.parseColor("#0F0101"))
         dateText.textSize = 10f
 

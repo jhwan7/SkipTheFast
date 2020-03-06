@@ -90,7 +90,7 @@
                             android:id="@+id/motivationalQuote"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Quote of the day:\nReal man never gives up"
+                            android:text="Quote of the day:\nNever gives up!"
                             android:layout_marginTop="15dp"
                             android:textColor="@color/whiteBodyColor"
                             android:textSize="12sp" />
