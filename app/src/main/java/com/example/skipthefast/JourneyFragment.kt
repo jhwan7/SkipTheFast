@@ -74,7 +74,7 @@ class JourneyFragment : Fragment(), MainActivity.ListenFromActivity {
     fun createCard(userInput: UserSurvey): View {
         val newCard = Card(context!!, userInput).getCard()
         newCard.setOnClickListener {
-            val dialoguePopup = DialoguePopup(userInput.emotion, userInput.exercise)
+            val dialoguePopup = DialoguePopup(userInput)
             dialoguePopup.show(activity!!.supportFragmentManager, "WADADADDAA")
         }
         return newCard

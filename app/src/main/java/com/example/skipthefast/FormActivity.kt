@@ -34,6 +34,10 @@ class FormActivity : AppCompatActivity() {
         returnIntent.putExtra("chain", userInput.chain)
         returnIntent.putExtra("emotion", userInput.emotion)
         returnIntent.putExtra("exercise", userInput.exercise)
+        returnIntent.putExtra("category", userInput.category)
+        returnIntent.putExtra("item", userInput.item)
+        returnIntent.putExtra("price", userInput.price)
+
         setResult(Activity.RESULT_OK, returnIntent)
         finish()
     }

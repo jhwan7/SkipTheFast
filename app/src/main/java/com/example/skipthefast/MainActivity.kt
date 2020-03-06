@@ -13,7 +13,6 @@ import com.example.skipthefast.ui.main.MainPagerAdapter
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
-import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
     private val LAUNCH_FORM_ACTIVITY: Int = 1
@@ -54,6 +53,9 @@ class MainActivity : AppCompatActivity() {
                 userInput.chain = data?.getStringExtra("chain").toString()
                 userInput.emotion = data?.getStringExtra("emotion").toString()
                 userInput.exercise = data?.getStringExtra("exercise").toString()
+                userInput.category = data?.getStringExtra("category").toString()
+                userInput.price = data?.getFloatExtra("price", 0f)!!
+                userInput.item = data?.getStringExtra("item").toString()
 
                 mainListener.populateCard(userInput)
             }

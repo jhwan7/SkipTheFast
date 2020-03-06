@@ -1,6 +1,8 @@
 package com.example.skipthefast
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import androidx.lifecycle.ViewModelProviders
+import com.example.skipthefast.Data.UserSurvey
 import com.example.skipthefast.Message.Communicator
 import kotlinx.android.synthetic.main.fragment_select_food.*
 
@@ -24,7 +28,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class SelectFoodFragment : Fragment() {
     private var model: Communicator?=null
-
+    private var userInput: UserSurvey = UserSurvey()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,6 +50,19 @@ class SelectFoodFragment : Fragment() {
         foodchain.adapter = activity?.let { ArrayAdapter<String>(it, android.R.layout.simple_spinner_item, foodChains) }
         category.adapter = activity?.let { ArrayAdapter<String>(it, android.R.layout.simple_spinner_item, categories) }
         item.adapter = activity?.let { ArrayAdapter<String>(it, android.R.layout.simple_spinner_item, items) }
+        (priceInput as EditText).addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                // do nothing
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // do nothing
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                model!!.setPriceCommunicator(s.toString().toFloat()) //To change body of created functions use File | Settings | File Templates.
+            }
+        })
 
         foodchain.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -55,6 +72,7 @@ class SelectFoodFragment : Fragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
                 model!!.setChainCommunicator(foodChains[position])
+                userInput.chain = foodChains[position]
             }
         }
         category.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
@@ -64,7 +82,9 @@ class SelectFoodFragment : Fragment() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                model!!.setChainCommunicator(foodChains[position])
+                model!!.setCategoryCommunicator(categories[position])
+                userInput.category = categories[position]
+
             }
         }
         item.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
@@ -74,7 +94,9 @@ class SelectFoodFragment : Fragment() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                model!!.setChainCommunicator(foodChains[position])
+                model!!.setItemCommunicator(items[position])
+                userInput.item = categories[position]
+
             }
         }
     }
