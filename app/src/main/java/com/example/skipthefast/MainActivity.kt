@@ -2,13 +2,18 @@ package com.example.skipthefast
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.example.skipthefast.ui.main.SectionsPagerAdapter
 import com.example.skipthefast.Data.UserSurvey
 import com.example.skipthefast.ui.main.MainPagerAdapter
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
     private val LAUNCH_FORM_ACTIVITY: Int = 1
@@ -23,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         this.mainListener = mainListener;
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         val tabs: TabLayout = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
         val fab: FloatingActionButton = findViewById(R.id.fab)
-
+        var fbServer = FBServer();
         fab.setOnClickListener {
             val intent = Intent(this, FormActivity::class.java)
             startActivityForResult(intent, LAUNCH_FORM_ACTIVITY);
@@ -52,6 +58,9 @@ class MainActivity : AppCompatActivity() {
                 mainListener.populateCard(userInput)
             }
         }
+
+
+
     }
 
 
