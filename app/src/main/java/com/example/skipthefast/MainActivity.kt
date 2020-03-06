@@ -13,6 +13,7 @@ import com.example.skipthefast.ui.main.MainPagerAdapter
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val LAUNCH_FORM_ACTIVITY: Int = 1
@@ -56,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                 userInput.category = data?.getStringExtra("category").toString()
                 userInput.price = data?.getFloatExtra("price", 0f)!!
                 userInput.item = data?.getStringExtra("item").toString()
+                userInput.date = Date(System.currentTimeMillis())
 
                 mainListener.populateCard(userInput)
             }

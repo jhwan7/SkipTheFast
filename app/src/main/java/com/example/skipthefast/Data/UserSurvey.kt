@@ -1,6 +1,7 @@
 package com.example.skipthefast.Data
 
 import org.json.JSONObject
+import java.util.*
 
 class UserSurvey{
     public var chain: String = ""
@@ -9,6 +10,7 @@ class UserSurvey{
     public var price: Float = 0f
     public var emotion: String = ""
     public var exercise: String = ""
+    public var date: Date = Date()
 
     constructor(data: JSONObject) {
         println("hello!")
