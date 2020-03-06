@@ -3,6 +3,7 @@ package com.example.skipthefast.server
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.example.skipthefast.Data.UserSurvey
 import com.google.firebase.database.*
 import java.lang.Exception
 import okhttp3.*
@@ -57,7 +58,7 @@ class FBServer {
 
     @RequiresApi(Build.VERSION_CODES.O)
 
-    fun getRecords(user:String, callback:(JSONObject)->Unit) {
+    fun getRecords(user:String/*, callback:(JSONObject)->Unit*/) {
         val client = OkHttpClient()
         val request = Request.Builder()
             .url(URL+"/"+user+".json")
@@ -72,10 +73,10 @@ class FBServer {
             override fun onResponse(call: Call, response: Response) {
                 if(response.isSuccessful){
                     if(response.isSuccessful){
-                        var responseData = response.body()?.string()
-                        var jsonData = JSONObject(responseData)
-                        Log.w(jsonData.toString(), "Recieved data from FB")
-                        callback(jsonData)
+                        var data = JSONObject(response.body()?.string())
+                        Log.w(data.toString(), "Recieved data from FB")
+                        val userSurveyData = UserSurvey(data)
+                        //callback(data)
                     }
                     else{
                         throw Exception("RESPONSE FAIL")
