@@ -1,9 +1,10 @@
 package com.example.skipthefast.com
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.Typeface
-import android.view.Gravity.CENTER
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -13,9 +14,14 @@ import com.example.skipthefast.Data.UserSurvey
 import com.example.skipthefast.R
 import com.google.android.material.card.MaterialCardView
 
+
 class Card(context: Context, userSurvey: UserSurvey) {
     private val context = context
     private val userSurvey = userSurvey
+
+    fun getUserData(): UserSurvey {
+        return userSurvey
+    }
 
     fun getCard(): MaterialCardView {
 
