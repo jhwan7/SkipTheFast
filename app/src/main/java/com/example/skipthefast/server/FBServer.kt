@@ -1,20 +1,32 @@
 package com.example.skipthefast.server
 
-import android.content.ContentValues.TAG
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.firebase.database.*
 import java.lang.Exception
-//import okhttp3.*
+import okhttp3.*
+import org.json.JSONObject
+import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-//import java.io.IOException
+
+/*
+* Usage
+*
+* var fb = FBServer()
+* writeEntry(*params) --> push data to FB
+*
+* fb.getRecords("jeongwon", fun(record){
+*   // callback
+*   Log.w(record.toString(), "TEST")
+* })
+*
+*  */
 
 class FBServer {
-
-    //private val client = OkHttpClient()
     private val database = FirebaseDatabase.getInstance().reference
+    private val URL = "https://test-projec-5a491.firebaseio.com/records"
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTime(): String? {
@@ -35,6 +47,7 @@ class FBServer {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun writeEntry(user: String, category: String, feeling: Int, foodChain: String, item: String, price: Double){
+        // TODO("Add activities")
         if(feeling>5 || feeling >0){
             throw Exception("feeling greater than 5 or less than 0")
         }
@@ -43,33 +56,32 @@ class FBServer {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getRecords(user:String) {
-        val recordLister = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val record = dataSnapshot.getValue(Entry::class.java)
-                // TODO('RETURN RECORD!!!')
-                Log.w( record.toString(),"Returned record froms FB")
+
+    fun getRecords(user:String, callback:(JSONObject)->Unit) {
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url(URL+"/"+user+".json")
+            .build()
+        val call = client.newCall(request)
+
+        call.enqueue(object : Callback{
+            override fun onFailure(call: Call, e: IOException) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
+            override fun onResponse(call: Call, response: Response) {
+                if(response.isSuccessful){
+                    if(response.isSuccessful){
+                        var responseData = response.body()?.string()
+                        var jsonData = JSONObject(responseData)
+                        Log.w(jsonData.toString(), "Recieved data from FB")
+                        callback(jsonData)
+                    }
+                    else{
+                        throw Exception("RESPONSE FAIL")
+                    }
+                }
             }
-        }
-        //        ref = FirebaseDatabase.getInstance().getReference("records/mathieu")
-//        ref.addValueEventListener(object: ValueEventListener {
-//            override fun onCancelled(p0: DatabaseError){
-//                TODO("not implemented")
-//            }
-//
-//            override fun onDataChange(p0: DataSnapshot) {
-//                if(p0!!.exists()){
-//                   for(h in p0.children){
-//                       println(h.value)
-//                   }
-//                }
-//            }
-//        })
-        database.addValueEventListener(recordLister)
+        })
     }
-
 }
