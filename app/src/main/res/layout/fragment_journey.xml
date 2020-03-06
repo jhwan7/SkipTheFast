@@ -108,18 +108,18 @@
             </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/cardsLayout">
 
-            <include layout="@layout/card_summary" />
+            </LinearLayout>
+        </ScrollView>
 
-            <include layout="@layout/card_summary" />
-
-            <include layout="@layout/card_summary" />
-
-        </LinearLayout>
     </LinearLayout>
 
 

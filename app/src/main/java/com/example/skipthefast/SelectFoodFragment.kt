@@ -38,7 +38,7 @@ class SelectFoodFragment : Fragment() {
 
         model= ViewModelProviders.of(activity!!).get(Communicator::class.java)
 
-        val foodChains = arrayOf("MC","BK","WEN","SUB")
+        val foodChains = arrayOf("MC","BK")
         val categories =  arrayOf("meat","fish","burger","sandwich")
         val items =  arrayOf("bigMac","Whopper","Bacon","Club")
 
@@ -54,7 +54,6 @@ class SelectFoodFragment : Fragment() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                Log.i("Form", foodChains[position])
                 model!!.setChainCommunicator(foodChains[position])
             }
         }
@@ -65,7 +64,7 @@ class SelectFoodFragment : Fragment() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                Log.i("Form", categories[position])
+                model!!.setChainCommunicator(foodChains[position])
             }
         }
         item.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
@@ -75,7 +74,7 @@ class SelectFoodFragment : Fragment() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                Log.i("Form", items[position])
+                model!!.setChainCommunicator(foodChains[position])
             }
         }
     }
