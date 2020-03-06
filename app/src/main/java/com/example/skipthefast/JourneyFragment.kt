@@ -34,32 +34,43 @@ class JourneyFragment : Fragment(), MainActivity.ListenFromActivity {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*val testData = UserSurvey()
-        testData.chain = "MK"
-        testData.emotion = "Happy"
-        testData.exercise = "Running"
-        userInputs.add(testData)
-        userInputs.add(testData)
-        userInputs.add(testData)
-        userInputs.add(testData)
-        userInputs.add(testData)
+        val testData1 = UserSurvey()
+        testData1.chain = "MC"
+        testData1.emotion = "happy"
+        testData1.exercise = "run"
+        userInputs.add(testData1)
+
+        val testData2 = UserSurvey()
+        testData2.chain = "BK"
+        testData2.emotion = "sad"
+        testData2.exercise = "walk"
+        userInputs.add(testData2)
+
+        val testData3 = UserSurvey()
+        testData3.chain = "BK"
+        testData3.emotion = "meh"
+        testData3.exercise = "breathe"
+        userInputs.add(testData3)
 
         for (userInput in userInputs) run {
-            println("Creating Card!")
-            val newCard = Card(context!!, userInput)
-            cardsLayout.addView(newCard.getCard())
-        }*/
+            cardsLayout.addView(createCard(userInput))
+        }
     }
 
     override fun populateCard(userInput: UserSurvey) {
         cardsLayout.invalidate()
-        println("Creating Card!")
-        val newCard = Card(context!!, userInput)
-        cardsLayout.setOnClickListener(View.OnClickListener {
-            val dialoguePopup:DialoguePopup = DialoguePopup(newCard.getUserData().emotion, newCard.getUserData().exercise)
-            dialoguePopup.show(activity!!.supportFragmentManager, "WADADADDAA")
+        userInputs.add(userInput)
+        cardsLayout.addView(createCard(userInput))
 
-        })
-        cardsLayout.addView(newCard.getCard())
+        totalUserEntry.text = userInputs.size.toString() + " entries total"
+    }
+
+    fun createCard(userInput: UserSurvey): View {
+        val newCard = Card(context!!, userInput).getCard()
+        newCard.setOnClickListener {
+            val dialoguePopup = DialoguePopup(userInput.emotion, userInput.exercise)
+            dialoguePopup.show(activity!!.supportFragmentManager, "WADADADDAA")
+        }
+        return newCard
     }
 }

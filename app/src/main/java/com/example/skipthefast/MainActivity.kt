@@ -7,8 +7,8 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import com.example.skipthefast.ui.main.SectionsPagerAdapter
 import com.example.skipthefast.Data.UserSurvey
+import com.example.skipthefast.server.FBServer
 import com.example.skipthefast.ui.main.MainPagerAdapter
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
