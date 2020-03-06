@@ -53,13 +53,24 @@ class CalendarFragment : Fragment() {
         compactcalendar_view.setUseThreeLetterAbbreviation(true)
 
         // ADD LOOP TO ADD MULTIPLE EVENTS
-        val eventDate: Long = Calendar.getInstance().run {
-            set(2020, 3-1, 14, 8, 45)
+        val eventDate1: Long = Calendar.getInstance().run {
+            set(2020, 3-1, 2, 8, 45)
             timeInMillis
         }
-
-        val ev1 = Event(Color.GREEN, eventDate, "Some extra data that I want to store.")
+        val eventDate2: Long = Calendar.getInstance().run {
+            set(2020, 3-1, 4, 8, 45)
+            timeInMillis
+        }
+        val eventDate3: Long = Calendar.getInstance().run {
+            set(2020, 3-1, 5, 8, 45)
+            timeInMillis
+        }
+        val ev1 = Event(Color.GREEN, eventDate1, "Some extra data that I want to store.")
         compactcalendar_view.addEvent(ev1)
+        val ev2 = Event(Color.GREEN, eventDate2, "Some extra data that I want to store.")
+        compactcalendar_view.addEvent(ev2)
+        val ev3 = Event(Color.GREEN, eventDate3, "Some extra data that I want to store.")
+        compactcalendar_view.addEvent(ev3)
         // LOOP ENDS HERE
 
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
