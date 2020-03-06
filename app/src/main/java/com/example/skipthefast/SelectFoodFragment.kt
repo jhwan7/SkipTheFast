@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProviders
+import com.example.skipthefast.Data.UserSurvey
 import com.example.skipthefast.Message.Communicator
 import kotlinx.android.synthetic.main.fragment_select_food.*
 
@@ -24,7 +25,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class SelectFoodFragment : Fragment() {
     private var model: Communicator?=null
-
+    private var userInput: UserSurvey = UserSurvey()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,6 +56,7 @@ class SelectFoodFragment : Fragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
                 model!!.setChainCommunicator(foodChains[position])
+                userInput.chain = foodChains[position]
             }
         }
         category.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
@@ -64,7 +66,9 @@ class SelectFoodFragment : Fragment() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                model!!.setChainCommunicator(foodChains[position])
+                model!!.setCategoryCommunicator(categories[position])
+                userInput.category = categories[position]
+
             }
         }
         item.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
@@ -74,7 +78,9 @@ class SelectFoodFragment : Fragment() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                model!!.setChainCommunicator(foodChains[position])
+                model!!.setItemCommunicator(items[position])
+                userInput.item = categories[position]
+
             }
         }
     }

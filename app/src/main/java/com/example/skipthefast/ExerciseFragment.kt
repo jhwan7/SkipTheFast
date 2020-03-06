@@ -63,6 +63,24 @@ class ExerciseFragment(formActivity: Context) : Fragment() {
             }
         })
 
+        model!!.category.observe(this, object: Observer<Any> {
+            override fun onChanged(t: Any?) {
+                Log.d("exercise fragment: ", "received " + t!!.toString())
+                userInput.category = t.toString()
+            }
+        })
+        model!!.item.observe(this, object: Observer<Any> {
+            override fun onChanged(t: Any?) {
+                Log.d("exercise fragment: ", "received " + t!!.toString())
+                userInput.item = t.toString()
+            }
+        })
+        model!!.price.observe(this, object: Observer<Any> {
+            override fun onChanged(t: Any?) {
+                Log.d("exercise fragment: ", "received " + t!!.toString())
+                userInput.price = t.toString().toFloat()
+            }
+        })
         model!!.emotion.observe(this, object: Observer<Any> {
             override fun onChanged(t: Any?) {
                 Log.d("exercise fragment: ", "received " + t!!.toString())
