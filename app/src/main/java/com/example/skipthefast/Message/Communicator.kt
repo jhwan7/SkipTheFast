@@ -7,7 +7,7 @@ class Communicator : ViewModel() {
     var chain = MutableLiveData<String>()
     var emotion = MutableLiveData<String>()
     var item = MutableLiveData<String>()
-    var price = MutableLiveData<String>()
+    var price = MutableLiveData<Float>()
     var category = MutableLiveData<String>()
 
     fun setChainCommunicator(msg: String) {
@@ -22,7 +22,7 @@ class Communicator : ViewModel() {
     fun setItemCommunicator(msg: String) {
         item.value = msg
     }
-    fun setPriceCommunicator(msg: String) {
+    fun setPriceCommunicator(msg: Float) {
         price.value = msg
     }
 }

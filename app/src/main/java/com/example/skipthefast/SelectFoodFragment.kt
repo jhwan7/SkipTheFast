@@ -1,6 +1,8 @@
 package com.example.skipthefast
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import androidx.lifecycle.ViewModelProviders
 import com.example.skipthefast.Data.UserSurvey
 import com.example.skipthefast.Message.Communicator
@@ -47,6 +50,19 @@ class SelectFoodFragment : Fragment() {
         foodchain.adapter = activity?.let { ArrayAdapter<String>(it, android.R.layout.simple_spinner_item, foodChains) }
         category.adapter = activity?.let { ArrayAdapter<String>(it, android.R.layout.simple_spinner_item, categories) }
         item.adapter = activity?.let { ArrayAdapter<String>(it, android.R.layout.simple_spinner_item, items) }
+        (priceInput as EditText).addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                // do nothing
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // do nothing
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                model!!.setPriceCommunicator(s.toString().toFloat()) //To change body of created functions use File | Settings | File Templates.
+            }
+        })
 
         foodchain.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
