@@ -1,14 +1,17 @@
 package com.example.skipthefast
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.skipthefast.Data.UserSurvey
 import com.example.skipthefast.com.Card
+import com.example.skipthefast.server.FBServer
 import kotlinx.android.synthetic.main.fragment_journey.*
 
 /**
@@ -32,6 +35,7 @@ class JourneyFragment : Fragment(), MainActivity.ListenFromActivity {
         return inflater.inflate(R.layout.fragment_journey, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val testData1 = UserSurvey()
@@ -55,6 +59,8 @@ class JourneyFragment : Fragment(), MainActivity.ListenFromActivity {
         for (userInput in userInputs) run {
             cardsLayout.addView(createCard(userInput))
         }
+        val server: FBServer = FBServer()
+        server.getRecords("jeongwon")
     }
 
     override fun populateCard(userInput: UserSurvey) {
