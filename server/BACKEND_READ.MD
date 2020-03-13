@@ -8,7 +8,7 @@
 `export FLASK_APP=server.py`
 `flask run`
 
-# DATA SCHEMA
+# FB Data Schema
 ```json
 root: {
     user_id:{
