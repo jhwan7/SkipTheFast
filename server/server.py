@@ -43,11 +43,11 @@ def authenticate():
 
 
 @app.route('/data', methods=['POST'])
-def get_records_by_time():
+def get_records_by_day():
     req = request.form
     try:
-        date = datetime.datetime(req['year'], req['month'], req['day'])
-        data = fb_server.get_records(id=req[id], idtk=req['idToken'], time=date)
+        date = datetime.datetime(int(req['year']), int(req['month']), int(req['day']))
+        data = fb_server.get_records(id=req['userId'], idtk=req['idToken'], time=date)
         return json.dumps(data)
     except FBException:
         return "Unsuccessful"

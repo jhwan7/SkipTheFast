@@ -1,6 +1,8 @@
 import datetime
 import pyrebase
 import CONST
+import json
+from collections import OrderedDict
 
 
 class UnableToLogInException(Exception):pass
@@ -46,8 +48,23 @@ class Firebase:
         return res
 
     def get_records(self, id, idtk, **kwargs):
-        return self.db.child('records').child(id).get(idtk).val()
+        if 'time' in kwargs.keys():
+            data = self.db.child('records').child(id).get(idtk).val()
+            data.popitem(last=False)
+            records = {}
+            for key, rec in data.items():
+                try:
+                    tk = rec["Time"]
+                    # TODO: check if within time
+                    if 'Time' in rec: del rec['Time'] # K, V ==> Time, rec/Time
+                    records[tk] = rec
+                except:
+                    pass
+            return records
 
+        return self.db.child('records').child(id).get(idtk).val()
+    
+    #
     # def send_pw_reset_email(self, email):
     #     return self.auth.send_password_reset_email(email)
     #
