@@ -17,13 +17,13 @@
         android:text="Enter PIN"
         android:textColor="#FFFFFF"
         android:textSize="36sp"
-        app:layout_constraintBottom_toTopOf="@+id/password"
+        app:layout_constraintBottom_toTopOf="@+id/pin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/pin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -35,13 +35,13 @@
         android:ems="10"
         android:inputType="numberPassword"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@id/login"
+        app:layout_constraintBottom_toTopOf="@id/login_pin_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/login_pin_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="200dp"

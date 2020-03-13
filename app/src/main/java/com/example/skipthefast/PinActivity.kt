@@ -15,10 +15,10 @@ class PinActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pin)
 
-        loginBtn = findViewById(R.id.login)
+        loginBtn = findViewById(R.id.pin)
 
         loginBtn.setOnClickListener{
-            val password = findViewById<EditText>(R.id.password).text.toString().toInt()
+            val password = findViewById<EditText>(R.id.password_signup).text.toString().toInt()
             // Retrieved the password
             // Compare this with the backend credential information
 

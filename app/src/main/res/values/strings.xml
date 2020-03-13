@@ -4,7 +4,8 @@
     <string name="tab_text_2">Calendar</string>
     <string name="tab_text_3">Analytics</string>
 
-    <string name="sign_in"><u>Sign Up</u></string>
+    <string name="sign_up"><u>Don\'t have an account?</u></string>
+    <string name="sign_in">Sign In</string>
 
     <string name="form_tab_1"> </string>
     <string name="form_tab_2"> </string>
