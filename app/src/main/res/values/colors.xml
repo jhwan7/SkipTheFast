@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="whiteBodyColor">#FCFCFC</color>
+    <color name="transparent">#00000000</color>
 
     <!--  card variables  -->
     <color name="title">#0F0101</color>

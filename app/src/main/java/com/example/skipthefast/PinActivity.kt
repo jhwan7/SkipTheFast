@@ -1,22 +1,19 @@
 package com.example.skipthefast
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 
-var testUserName = "John7@uwo.ca"
-var testPassword = 1234
+var credentials = 1234
 
-class LoginActivity : AppCompatActivity() {
+class PinActivity : AppCompatActivity() {
 
     lateinit var loginBtn:Button
-    lateinit var username:Button
-    lateinit var password:Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_pin)
 
         loginBtn = findViewById(R.id.login)
 
@@ -31,5 +28,7 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
+
     }
 }
