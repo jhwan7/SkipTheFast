@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 
 var testUserName = "Joe7@uwo.ca"
 var testPassword = "1234"
@@ -42,6 +43,15 @@ class LoginActivity : AppCompatActivity() {
             if(loginEmail == testUserName && testPassword == loginPassword) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+            } else {
+                val alertDialog = AlertDialog.Builder(this)
+                alertDialog.setTitle("Incorrect Information")
+                alertDialog.setMessage("Your username or password is incorrect")
+                alertDialog.setPositiveButton(android.R.string.yes) { dialog, which ->
+                    // Lead them back to login page
+                }
+
+                alertDialog.show()
             }
 
         }

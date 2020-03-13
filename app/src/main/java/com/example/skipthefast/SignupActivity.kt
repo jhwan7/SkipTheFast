@@ -61,6 +61,3 @@ class SignupActivity : AppCompatActivity() {
 
     }
 }
-
-//server/firebase.py
-//        server/server.py
