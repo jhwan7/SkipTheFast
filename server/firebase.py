@@ -3,9 +3,7 @@ import pyrebase
 import CONST
 import json
 from collections import OrderedDict
-
-
-class UnableToLogInException(Exception):pass
+import re
 
 
 class AttemptToDuplicateFirebase(Exception):pass
@@ -15,35 +13,27 @@ class Firebase:
     instance = None
 
     def __init__(self, fb_config):
+        # singleton
         if Firebase.instance is not None:
             raise AttemptToDuplicateFirebase
         else:
             Firebase.instance = self
+
+        # pyrebase initialization
         self.firebase = pyrebase.initialize_app(fb_config)
         self.db = self.firebase.database()
         self.auth = self.firebase.auth()
-        self.status = {
-            'logged': False,
-            'user': None
-        }
 
     def authenticate(self, email, pw):
-        try:
-            login = self.auth.sign_in_with_email_and_password(email, pw)
-            return login
-        except UnableToLogInException:
-            return False
+        login = self.auth.sign_in_with_email_and_password(email, pw)
+        return login
 
     def create_user(self, email, pw):
-        user = self.auth.create_user_with_email_and_password(email, pw)
-        res = self.push_record(id=user['localId'], idtk=user['idToken'], record="None")
+        fb_res = self.auth.create_user_with_email_and_password(email, pw)
+        res = self.push_record(id=fb_res['localId'], idtk=fb_res['idToken'], record="None")
         return res
 
     def push_record(self, id, idtk, record):
-        data = {
-            'time': str(datetime.datetime.now()),
-            'record': record
-        }
         res = self.db.child('records').child(id).push(record, idtk)
         return res
 
@@ -53,16 +43,17 @@ class Firebase:
             data.popitem(last=False)
             records = {}
             for key, rec in data.items():
-                try:
-                    tk = rec["Time"]
-                    # TODO: check if within time
-                    if 'Time' in rec: del rec['Time'] # K, V ==> Time, rec/Time
-                    records[tk] = rec
-                except:
-                    pass
+                if 'Time' in rec:
+                    tk = rec['Time']
+                    del rec['Time'] # K, V ==> Time, rec/Time
+                    if kwargs['time'].strftime("%Y-%m-%d %H:%M:%S").split(' ')[0] == tk.split(' ')[0]:
+                        # stamp = re.findall(r"\d+", tk)   
+                        records[tk] = rec
+                else:
+                    print("Passed - no time value")
             return records
-
-        return self.db.child('records').child(id).get(idtk).val()
+        else:
+            return self.db.child('records').child(id).get(idtk).val()
     
     #
     # def send_pw_reset_email(self, email):
