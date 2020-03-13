@@ -27,9 +27,9 @@ root: {
 ip, port are provided upon running AWS server. 
 ### Create User
 [PUT] http://{ip}:{port}/user <br/>
-curl --location --request PUT 'http://127.0.0.1:5000/user' \
+`curl --location --request PUT 'http://127.0.0.1:5000/user' \
 --data-urlencode 'email={email}' \
---data-urlencode 'password={password}'
+--data-urlencode 'password={password}'`
 ### Authenticate
 [POST] http://{ip}:{port}/login <br/>
 `curl --location --request POST 'http://127.0.0.1:5000/login' \
