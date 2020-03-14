@@ -10,12 +10,14 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 
+
 var testUserName = "Joe7@uwo.ca"
 var testPassword = "1234"
 
 class LoginActivity : AppCompatActivity() {
 
     lateinit var loginBtn:Button
+
     lateinit var email: EditText
     lateinit var password:EditText
     lateinit var signupBtn:Button
@@ -32,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
         checkBox = findViewById(R.id.checkBox)
 
         loginBtn.setOnClickListener{
+
             // Retrieved the email, password
             val loginEmail = email.text.toString()
             val loginPassword = password.text.toString()

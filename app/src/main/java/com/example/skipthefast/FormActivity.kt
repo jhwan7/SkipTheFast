@@ -2,10 +2,13 @@ package com.example.skipthefast
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.viewpager.widget.ViewPager
 import com.example.skipthefast.Data.UserSurvey
+import com.example.skipthefast.ServerConnection.ProxyServer
 import com.example.skipthefast.ui.main.FormsPagerAdapter
 import com.google.android.material.tabs.TabLayout
 
