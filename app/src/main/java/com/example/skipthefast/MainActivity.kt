@@ -8,7 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.example.skipthefast.Data.UserSurvey
-import com.example.skipthefast.ServerConnection.FBServer
+
 import com.example.skipthefast.ui.main.MainPagerAdapter
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         val tabs: TabLayout = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
         val fab: FloatingActionButton = findViewById(R.id.fab)
-        var fbServer = FBServer();
+
         fab.setOnClickListener {
             val intent = Intent(this, FormActivity::class.java)
             startActivityForResult(intent, LAUNCH_FORM_ACTIVITY);
