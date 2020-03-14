@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.example.skipthefast.ServerConnection.ProxyServer
+import com.example.skipthefast.ServerConnection.UserServer // TODO("DELETE DEPENDENCIES FROM ServerConnection")
 
 var credentials = 1234
 
@@ -25,8 +25,7 @@ class LoginActivity : AppCompatActivity() {
             val password = findViewById<EditText>(R.id.password).text.toString().toInt()
             // Retrieved the password
             // Compare this with the backend credential information
-            val us = ProxyServer()
-            us.testConnection()
+            val uss = UserServer("jeongwon412@gmail.com", "test1234")// TODO("DELETE DEPENDENCIES FROM ServerConnection")
             // credentials = Value from REST API, OR SEND Password to verify.
             if(password == credentials) {
                 val intent = Intent(this, MainActivity::class.java)

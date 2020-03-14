@@ -32,7 +32,31 @@ open class ProxyServer {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun createUser(email:String, password:String){
+        // , callback: (res: JSONObject)->Unit
+        val client = OkHttpClient()
+        val createUserURL = "$SERVER_URL/user"
+        val bodyBuilder = FormBody.Builder()
 
+        bodyBuilder.add("email", email)
+        bodyBuilder.add("password", password)
+        val putBody = bodyBuilder.build()
+
+        val request = Request.Builder()
+            .url(createUserURL)
+            .put(putBody)
+            .build()
+
+        val call = client.newCall(request)
+
+        call.enqueue(object : Callback{
+            override fun onFailure(call: Call, e: IOException) {
+                Log.w("ProxyServer", "Failed to create new account")
+                e.printStackTrace()
+            }
+            override fun onResponse(call: Call, response: Response) {
+                Log.w("ProxyServer", "Successfully created new account")
+            }
+        })
     }
 }
 
