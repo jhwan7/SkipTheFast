@@ -1,4 +1,4 @@
-package com.example.skipthefast.server
+package com.example.skipthefast.ServerConnection
 
 import android.os.Build
 import android.util.Log
