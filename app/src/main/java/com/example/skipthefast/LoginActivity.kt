@@ -1,38 +1,68 @@
 package com.example.skipthefast
 
 import android.content.Intent
-import android.os.Build
-import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.example.skipthefast.ServerConnection.UserServer // TODO("DELETE DEPENDENCIES FROM ServerConnection")
+import android.os.Bundle
+import android.util.Log
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 
-var credentials = 1234
+
+var testUserName = "Joe7@uwo.ca"
+var testPassword = "1234"
 
 class LoginActivity : AppCompatActivity() {
 
     lateinit var loginBtn:Button
-    @RequiresApi(Build.VERSION_CODES.O)
+
+    lateinit var email: EditText
+    lateinit var password:EditText
+    lateinit var signupBtn:Button
+    lateinit var checkBox: CheckBox
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        loginBtn = findViewById(R.id.login)
+        loginBtn = findViewById(R.id.login_btn)
+        email = findViewById(R.id.email_login)
+        password = findViewById(R.id.password_login)
+        signupBtn = findViewById(R.id.signup_btn)
+        checkBox = findViewById(R.id.checkBox)
 
         loginBtn.setOnClickListener{
-            val password = findViewById<EditText>(R.id.password).text.toString().toInt()
-            // Retrieved the password
-            // Compare this with the backend credential information
-            val uss = UserServer("jeongwon412@gmail.com", "test1234")// TODO("DELETE DEPENDENCIES FROM ServerConnection")
-            // credentials = Value from REST API, OR SEND Password to verify.
-            if(password == credentials) {
+
+            // Retrieved the email, password
+            val loginEmail = email.text.toString()
+            val loginPassword = password.text.toString()
+
+//          Do something with check box to allow remember ability
+            val remember = checkBox.isChecked
+
+//          Edit this function to reflect backend authentication
+            if(loginEmail == testUserName && testPassword == loginPassword) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+            } else {
+                val alertDialog = AlertDialog.Builder(this)
+                alertDialog.setTitle("Incorrect Information")
+                alertDialog.setMessage("Your username or password is incorrect")
+                alertDialog.setPositiveButton(android.R.string.yes) { dialog, which ->
+                    // Lead them back to login page
+                }
+
+                alertDialog.show()
             }
+
         }
 
-
+        signupBtn.setOnClickListener{
+            val intent = Intent(this, SignupActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
+
