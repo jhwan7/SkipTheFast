@@ -4,6 +4,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import okhttp3.*
+import org.json.JSONObject
 import java.io.IOException
 
 open class ProxyServer {
@@ -12,14 +13,16 @@ open class ProxyServer {
     @RequiresApi(Build.VERSION_CODES.O)
     fun testConnection(){
         val client = OkHttpClient()
+        val testURL = "$SERVER_URL/test"
         val request = Request.Builder()
-            .url("$SERVER_URL/test")
+            .url(testURL)
             .build()
         val call = client.newCall(request)
 
         call.enqueue(object : Callback{
             override fun onFailure(call: Call, e: IOException) {
-                Log.w("ProxyServer", "Failed Connection")
+                Log.w("ProxyServer", "Failed Connection $testURL")
+                e.printStackTrace()
             }
             override fun onResponse(call: Call, response: Response) {
                 Log.w("ProxyServer", "Successful Connection")

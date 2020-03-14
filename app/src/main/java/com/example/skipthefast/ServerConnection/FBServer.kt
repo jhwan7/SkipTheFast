@@ -75,7 +75,6 @@ class FBServer {
                     if(response.isSuccessful){
                         var data = JSONObject(response.body()?.string())
                         Log.w(data.toString(), "Recieved data from FB")
-                        val userSurveyData = UserSurvey(data)
                         //callback(data)
                     }
                     else{
