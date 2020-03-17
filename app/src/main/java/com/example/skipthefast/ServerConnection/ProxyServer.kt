@@ -31,7 +31,7 @@ open class ProxyServer {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun createUser(email:String, password:String){
+    fun createUser(email:String, password:String, callback: (JSONObject)->(Unit)){
         // , callback: (res: JSONObject)->Unit
         val client = OkHttpClient()
         val createUserURL = "$SERVER_URL/user"
@@ -54,7 +54,8 @@ open class ProxyServer {
                 e.printStackTrace()
             }
             override fun onResponse(call: Call, response: Response) {
-                Log.w("ProxyServer", "Successfully created new account")
+                val responseData = response.body()?.string()
+                callback(JSONObject(responseData))
             }
         })
     }
