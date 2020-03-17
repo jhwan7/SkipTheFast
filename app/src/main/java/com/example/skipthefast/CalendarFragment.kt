@@ -16,6 +16,7 @@ import android.graphics.Color
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
+import com.example.skipthefast.Data.UserSurvey
 import com.github.sundeepk.compactcalendarview.domain.Event
 import java.time.LocalDate
 import java.time.Year
@@ -30,6 +31,10 @@ import java.text.SimpleDateFormat
  * create an instance of this fragment.
  */
 class CalendarFragment : Fragment() {
+
+    //    Test data variable
+    private var test: UserSurvey = UserSurvey();
+
     private var header: TextView? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,15 +59,15 @@ class CalendarFragment : Fragment() {
 
         // ADD LOOP TO ADD MULTIPLE EVENTS
         val eventDate1: Long = Calendar.getInstance().run {
-            set(2020, 3-1, 2, 8, 45)
+            set(2020, 3 - 1, 2, 8, 45)
             timeInMillis
         }
         val eventDate2: Long = Calendar.getInstance().run {
-            set(2020, 3-1, 4, 8, 45)
+            set(2020, 3 - 1, 4, 8, 45)
             timeInMillis
         }
         val eventDate3: Long = Calendar.getInstance().run {
-            set(2020, 3-1, 5, 8, 45)
+            set(2020, 3 - 1, 5, 8, 45)
             timeInMillis
         }
         val ev1 = Event(Color.GREEN, eventDate1, "Some extra data that I want to store.")
@@ -75,9 +80,21 @@ class CalendarFragment : Fragment() {
 
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
             override fun onDayClick(dateClicked: Date) {
+
+                //Dummy data
+                test.chain = "MC"
+                test.category = "burgers"
+                test.emotion = "Sad"
+                test.exercise = "Walk"
+                test.price = 5.95f
+                test.item = "Big Mac"
+                test.date = dateClicked
+
                 val events = compactcalendar_view.getEvents(dateClicked)
-                if(events.size > 0) {
-                    Toast.makeText(context, "${events[0].data}", Toast.LENGTH_SHORT).show()
+                if (events.size > 0) {
+//                    Toast.makeText(context, "${events[0].data}", Toast.LENGTH_SHORT).show()
+                    val dialoguePopup = DialoguePopup(test)
+                    dialoguePopup.show(activity!!.supportFragmentManager, "WADADADDAA")
                 }
             }
 

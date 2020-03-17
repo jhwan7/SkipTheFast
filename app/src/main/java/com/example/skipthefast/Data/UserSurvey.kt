@@ -12,6 +12,13 @@ class UserSurvey{
     public var exercise: String = ""
     public var date: Date = Date()
 
+    //    fun fillOut(data: JSONObject){
+//        println("Test")
+//        data.keys().forEach {
+//
+//        }
+//    }
+
     constructor(data: JSONObject) {
         println("hello!")
         data.keys().forEach {
