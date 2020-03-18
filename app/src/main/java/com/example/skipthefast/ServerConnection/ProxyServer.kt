@@ -32,7 +32,6 @@ open class ProxyServer {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun createUser(email:String, password:String, callback: (Response)->(Unit)){
-        // , callback: (res: JSONObject)->Unit
         val client = OkHttpClient()
         val createUserURL = "$SERVER_URL/user"
         val bodyBuilder = FormBody.Builder()
