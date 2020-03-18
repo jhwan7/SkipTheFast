@@ -8,7 +8,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 open class ProxyServer {
-    protected val SERVER_URL = "http://35.182.150.55:8000"
+    protected val SERVER_URL = "http://15.222.247.34:8000"
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun testConnection(){
@@ -31,7 +31,7 @@ open class ProxyServer {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun createUser(email:String, password:String, callback: (JSONObject)->(Unit)){
+    fun createUser(email:String, password:String, callback: (Response)->(Unit)){
         // , callback: (res: JSONObject)->Unit
         val client = OkHttpClient()
         val createUserURL = "$SERVER_URL/user"
@@ -54,8 +54,7 @@ open class ProxyServer {
                 e.printStackTrace()
             }
             override fun onResponse(call: Call, response: Response) {
-                val responseData = response.body()?.string()
-                callback(JSONObject(responseData))
+                callback(response)
             }
         })
     }
