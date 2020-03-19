@@ -59,7 +59,9 @@ def push_data():
         'Feeling': req['Feeling'],
         'Food Chain': req['FoodChain'],
         'Item': req['Item'],
-        'Time': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        'Time': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        'Price': float(req['Price']),
+        'Exercise': req['Exercise']
     }
     return fb_server.push_record(id=req['userId'], idtk=req['idToken'], record=record)
 
