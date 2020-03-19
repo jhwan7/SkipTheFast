@@ -39,22 +39,22 @@ class Firebase:
 
     def get_records(self, id, idtk, **kwargs):
         data = self.db.child('records').child(id).get(idtk).val()
-        if 'time' in kwargs.keys():
-            data.popitem(last=False)
-            records = {}
-            for key, rec in data.items():
-                if 'Time' in rec:
-                    tk = rec['Time']
-                    del rec['Time'] # K, V ==> Time, rec/Time
+        data.popitem(last=False)
+        records = {}
+        for key, rec in data.items():
+            if 'Time' in rec:
+                tk = rec['Time']
+                del rec['Time'] # K, V ==> Time, rec/Time
+                if 'time' in kwargs.keys():
                     if kwargs['time'].strftime("%Y-%m-%d %H:%M:%S").split(' ')[0] == tk.split(' ')[0]:
                         # stamp = re.findall(r"\d+", tk)   
                         records[tk] = rec
                 else:
-                    print("Passed - no time value")
-            return records
-        else:
-            return data
-    
+                    records[tk] = rec
+            else:
+                print("Passed - no time value")
+        return records
+   
     #
     # def send_pw_reset_email(self, email):
     #     return self.auth.send_password_reset_email(email)
