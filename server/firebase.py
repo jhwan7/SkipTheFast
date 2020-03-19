@@ -38,8 +38,8 @@ class Firebase:
         return res
 
     def get_records(self, id, idtk, **kwargs):
+        data = self.db.child('records').child(id).get(idtk).val()
         if 'time' in kwargs.keys():
-            data = self.db.child('records').child(id).get(idtk).val()
             data.popitem(last=False)
             records = {}
             for key, rec in data.items():
@@ -53,7 +53,7 @@ class Firebase:
                     print("Passed - no time value")
             return records
         else:
-            return self.db.child('records').child(id).get(idtk).val()
+            return data
     
     #
     # def send_pw_reset_email(self, email):

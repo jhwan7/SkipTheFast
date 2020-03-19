@@ -34,11 +34,21 @@ def authenticate():
 
 
 @app.route('/data', methods=['POST'])
-def get_records_by_day():
+def get_records():
     req = request.form
-    date = datetime.datetime(int(req['year']), int(req['month']), int(req['day']))
-    data = fb_server.get_records(id=req['userId'], idtk=req['idToken'], time=date)
-    return json.dumps(data)
+    has_time = [
+        "year" in req.keys(),
+        "month" in req.keys(),
+        "day" in req.keys()
+    ]
+    if  all(has_time):
+        date = datetime.datetime(int(req['year']), int(req['month']), int(req['day']))
+        data = fb_server.get_records(id=req['userId'], idtk=req['idToken'], time=date)
+        return json.dumps(data)
+    else:
+        data = fb_server.get_records(id=req['userId'], idtk=req['idToken'])
+        return json.dumps(data)
+    
 
 
 @app.route('/data', methods=['PUT'])
@@ -66,6 +76,4 @@ def push_data():
 if __name__ == '__main__':
     print("Running from __main__")
     app.run(host='0.0.0.0', debug=True, port=8000)
-
-
 
