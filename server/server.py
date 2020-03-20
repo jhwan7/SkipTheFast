@@ -66,6 +66,20 @@ def push_data():
     return fb_server.push_record(id=req['userId'], idtk=req['idToken'], record=record)
 
 
+@app.route('/goal', methods=['PUT'])
+def push_goal():
+    req = request.form
+    goal = {
+        'Goal': req['Goal'],
+        'Time': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+    return fb_server.push_goal(id=req['userId'], idtk=req['idToken'], goal=goal)
+
+
+@app.route('/goal', methods=['POST'])
+def get_goal():
+    req = request.form
+    return fb_server.get_goal(id=req['userId'], idtk=req['idToken'])
 
 # @app.route('/analytic', methods=['POST'])
 # def get_analytic():

@@ -54,6 +54,15 @@ class Firebase:
             else:
                 print("Passed - no time value")
         return records
+
+    def push_goal(self, id, idtk, goal):
+        res = self.db.child('users').child(id).child('goal').set(goal, idtk)
+        return res
+
+    def get_goal(self, id, idtk):
+        res = self.db.child('users').child(id).child('goal').get(idtk).val()
+        print(res)
+        return res
    
     #
     # def send_pw_reset_email(self, email):
