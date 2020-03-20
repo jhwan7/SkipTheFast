@@ -30,6 +30,17 @@ class UserSurvey{
         }
         this.date = date
     }
-
+    fun emotionToNum(): Int {
+        when(emotion){
+            "happy" -> return 5
+            "glad" -> return 4
+            "meh" -> return 3
+            "sad" -> return 2
+            "miserable" -> return 1
+            else -> {
+                throw Exception("Unknown emotion type")
+            }
+        }
+    }
     constructor() {}
 }
