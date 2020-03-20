@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     private val LAUNCH_FORM_ACTIVITY: Int = 1
 
     interface ListenFromActivity {
-        fun populateCard(userInput: UserSurvey)
+        fun populateCard(userInput: UserSurvey, updateDB: Boolean = true)
     }
 
     lateinit var mainListener: ListenFromActivity

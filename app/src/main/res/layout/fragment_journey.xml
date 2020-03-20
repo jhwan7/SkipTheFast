@@ -24,14 +24,14 @@
                 android:textSize="25sp"
                 android:textStyle="bold"
                 android:textColor="@color/title"
-                android:text="Hello Heung!"
+                android:text="Hello!"
                 android:layout_centerVertical="true"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profileImage"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/user"
+                android:src="@drawable/default_user"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
         </RelativeLayout>
@@ -83,7 +83,7 @@
                             android:id="@+id/totalUserEntry"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="3 entries total"
+                            android:text="0 entries total"
                             android:textColor="@color/whiteBodyColor"
                             android:textSize="15sp" />
                         <TextView

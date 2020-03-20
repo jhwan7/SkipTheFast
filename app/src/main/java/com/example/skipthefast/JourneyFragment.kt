@@ -8,9 +8,13 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.skipthefast.Data.UserSurvey
+import com.example.skipthefast.ServerConnection.UserServer
 import com.example.skipthefast.com.Card
 import kotlinx.android.synthetic.main.fragment_journey.*
-import java.text.SimpleDateFormat
+import org.json.JSONObject
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -19,7 +23,7 @@ import java.util.*
  * create an instance of this fragment.
  */
 class JourneyFragment : Fragment(), MainActivity.ListenFromActivity {
-    val userInputs: MutableList<UserSurvey> = mutableListOf()
+    private val userInputs: MutableList<UserSurvey> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,64 +41,46 @@ class JourneyFragment : Fragment(), MainActivity.ListenFromActivity {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val testData1 = UserSurvey()
-        testData1.chain = "MC"
-        testData1.emotion = "happy"
-        testData1.exercise = "run"
-        testData1.category = "burger"
-        testData1.price = 10.5f
-        testData1.date = Date(System.currentTimeMillis() - 86400000 * 4)
-        userInputs.add(testData1)
+        Thread(Runnable {
+            UserServer.getData(fun(res) {
+                val data = JSONObject(res.body()!!.string())
 
-        val testData2 = UserSurvey()
-        testData2.chain = "BK"
-        testData2.emotion = "sad"
-        testData2.exercise = "walk"
-        testData2.category = "meat"
-        testData2.price = 8.5f
-        testData2.date = Date(System.currentTimeMillis() - 86400000 * 2)
-        userInputs.add(testData2)
+                data.keys().forEachRemaining { dateStr ->
+                    run {
+                        val date: Date = Date.from(
+                            LocalDateTime.parse(
+                                dateStr,
+                                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                            ).atZone(ZoneId.systemDefault()).toInstant()
+                        )
+                        val userInput = UserSurvey(data.get(dateStr) as JSONObject, date)
+                        activity!!.runOnUiThread(java.lang.Runnable {
+                            populateCard(userInput, false)
+                        }
+                        )
+                    }
+                }
+            })
+        }).start()
 
-        val testData3 = UserSurvey()
-        testData3.chain = "BK"
-        testData3.emotion = "meh"
-        testData3.exercise = "breathe"
-        testData3.category = "sandwich"
-        testData3.price = 13.5f
-        testData3.date = Date(System.currentTimeMillis() - 86400000 * 2)
-        userInputs.add(testData3)
-
-        val testData4 = UserSurvey()
-        testData4.chain = "BK"
-        testData4.emotion = "happy"
-        testData4.exercise = "bike"
-        testData4.category = "sandwich"
-        testData4.price = 11.5f
-        testData4.date = Date(System.currentTimeMillis() - 86400000 * 1)
-        userInputs.add(testData4)
-
-        val testData5 = UserSurvey()
-        testData5.chain = "BK"
-        testData5.emotion = "meh"
-        testData5.exercise = "run"
-        testData5.category = "sandwich"
-        testData5.price = 12.5f
-        testData5.date = Date(System.currentTimeMillis() - 86400000 * 1)
-        userInputs.add(testData5)
-
-        val formatter = SimpleDateFormat("yyyy-MM-dd")
-        date.text = formatter.format(Date(System.currentTimeMillis()))
-        totalUserEntry.text = userInputs.size.toString() + " entries total"
-
-        for (userInput in userInputs) run {
-            cardsLayout.addView(createCard(userInput))
-        }
     }
 
-    override fun populateCard(userInput: UserSurvey) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun populateCard(userInput: UserSurvey, updateDB: Boolean) {
         cardsLayout.invalidate()
         userInputs.add(userInput)
         cardsLayout.addView(createCard(userInput))
+
+        if (updateDB) {
+            UserServer.pushData(userInput, fun(res) {
+                if (res.isSuccessful) {
+                    println("Updated db!")
+                }
+                else {
+                    println("Update failed")
+                }
+            })
+        }
 
         totalUserEntry.text = userInputs.size.toString() + " entries total"
     }
@@ -103,7 +89,7 @@ class JourneyFragment : Fragment(), MainActivity.ListenFromActivity {
         val newCard = Card(context!!, userInput).getCard()
         newCard.setOnClickListener {
             val dialoguePopup = DialoguePopup(userInput)
-            dialoguePopup.show(activity!!.supportFragmentManager, "WADADADDAA")
+            dialoguePopup.show(activity!!.supportFragmentManager, "")
         }
         return newCard
     }

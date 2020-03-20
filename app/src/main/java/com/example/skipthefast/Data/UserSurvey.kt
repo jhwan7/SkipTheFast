@@ -12,20 +12,23 @@ class UserSurvey{
     public var exercise: String = ""
     public var date: Date = Date()
 
-    constructor(data: JSONObject) {
-        println("hello!")
+    constructor(data: JSONObject, date: Date) {
         data.keys().forEach {
-            val surveyData = (data.get(it) as JSONObject)
-            surveyData.keys().forEach {
-                if (it == "chain") {
-                    chain = surveyData.get(it).toString()
-                } else if (it == "emotion") {
-                    emotion = surveyData.get(it).toString()
-                } else if (it == "exercise") {
-                    exercise = surveyData.get(it).toString()
-                }
+            if (it == "Food Chain") {
+                chain = data.get(it).toString()
+            } else if (it == "Feeling") {
+                emotion = data.get(it).toString()
+            } else if (it == "Price") {
+                price = data.get(it).toString().toFloat()
+            } else if (it == "Exercise") {
+                exercise = data.get(it).toString()
+            } else if (it == "Category") {
+                category = data.get(it).toString()
+            } else if (it == "Item") {
+                item = data.get(it).toString()
             }
         }
+        this.date = date
     }
 
     constructor() {}
