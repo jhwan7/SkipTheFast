@@ -1,5 +1,6 @@
 package com.example.skipthefast
 
+import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -46,38 +47,23 @@ class CalendarFragment : Fragment() {
         return view
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
 
         compactcalendar_view.setFirstDayOfWeek(Calendar.MONDAY)
         compactcalendar_view.setUseThreeLetterAbbreviation(true)
+        compactcalendar_view.shouldDrawIndicatorsBelowSelectedDays(true)
 
-        // ADD LOOP TO ADD MULTIPLE EVENTS
-        val eventDate1: Long = Calendar.getInstance().run {
-            set(2020, 3-1, 2, 8, 45)
-            timeInMillis
-        }
-        val eventDate2: Long = Calendar.getInstance().run {
-            set(2020, 3-1, 4, 8, 45)
-            timeInMillis
-        }
-        val eventDate3: Long = Calendar.getInstance().run {
-            set(2020, 3-1, 5, 8, 45)
-            timeInMillis
-        }
-        val ev1 = Event(Color.GREEN, eventDate1, "Some extra data that I want to store.")
-        compactcalendar_view.addEvent(ev1)
-        val ev2 = Event(Color.GREEN, eventDate2, "Some extra data that I want to store.")
-        compactcalendar_view.addEvent(ev2)
-        val ev3 = Event(Color.GREEN, eventDate3, "Some extra data that I want to store.")
-        compactcalendar_view.addEvent(ev3)
-        // LOOP ENDS HERE
+
+        updateCalendar(compactcalendar_view)
 
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onDayClick(dateClicked: Date) {
                 val events = compactcalendar_view.getEvents(dateClicked)
-                if(true) {
+                if(events.size > 0) {
                     val df = SimpleDateFormat("MM/dd/yyyy")
                     val now: String = df.format(dateClicked)
                     val date = now.split('/')
@@ -115,6 +101,7 @@ class CalendarFragment : Fragment() {
                 }
             }
 
+
             override fun onMonthScroll(firstDayOfNewMonth: Date) {
                 val time = firstDayOfNewMonth.toString().split(" ")
                 monthYear.text = time[1] + "  " + time[5]
@@ -122,4 +109,31 @@ class CalendarFragment : Fragment() {
         })
 
     }
+    companion object {
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun updateCalendar (calendar: CompactCalendarView) {
+            UserServer.getData(fun (res) {
+                if(res.isSuccessful) {
+
+                    val userRecord = res.body()?.string()
+
+                    val json = JSONObject(userRecord)
+
+                    val keys = json.names()
+                    for (i in 0 until json.length()) {
+                        Log.i("Calendar", keys.get(i).toString())
+                        val date = keys.get(i).toString().split(" ")[0].split("-")
+                        val time = keys.get(i).toString().split(" ")[1].split(":")
+                        val eventDate: Long = Calendar.getInstance().run {
+                            set(date[0].toInt(), date[1].toInt()-1, date[2].toInt(), time[0].toInt(), time[1].toInt())
+                            timeInMillis
+                        }
+                        val ev = Event(Color.WHITE, eventDate, "User ate on this date")
+                        calendar.addEvent(ev)
+                    }
+                }
+            })
+        }
+    }
+
 }
