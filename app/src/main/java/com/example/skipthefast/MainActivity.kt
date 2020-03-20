@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                     UserServer.pushData(userInput, fun(res) {
                         Looper.prepare()
                         if(res.isSuccessful) {
-
+                            CalendarFragment.updateCalendar(findViewById(R.id.compactcalendar_view))
                             val alertDialog = AlertDialog.Builder(this)
                             alertDialog.setTitle("Push User Data")
                             alertDialog.setMessage("Succesfully Pushed")
