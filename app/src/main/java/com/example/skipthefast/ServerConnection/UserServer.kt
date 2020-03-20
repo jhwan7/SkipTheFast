@@ -3,6 +3,7 @@ package com.example.skipthefast.ServerConnection
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.example.skipthefast.Data.UserSurvey
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
@@ -112,7 +113,7 @@ object UserServer: ProxyServer() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun pushData(category:String, feeling:Number, foodChain:String, item:String, callback:(Response)->Unit){
+    fun pushData(userData:UserSurvey, callback:(Response)->Unit){
         if(!isAuthenticated){
             throw Exception("Unauthenticated user")
         }
@@ -121,10 +122,12 @@ object UserServer: ProxyServer() {
             val createUserURL = "$SERVER_URL/data"
             val bodyBuilder = FormBody.Builder()
 
-            bodyBuilder.add("Category", category)
-            bodyBuilder.add("Feeling", feeling.toString())
-            bodyBuilder.add("FoodChain", foodChain)
-            bodyBuilder.add("Item", item)
+            bodyBuilder.add("Category", userData.category)
+            bodyBuilder.add("Feeling", userData.emotionToNum().toString())
+            bodyBuilder.add("FoodChain", userData.chain)
+            bodyBuilder.add("Item", userData.item)
+            bodyBuilder.add("Price", userData.price.toString())
+            bodyBuilder.add("Exercise", userData.exercise)
             bodyBuilder.add("userId", userId)
             bodyBuilder.add("idToken", idToken)
 
