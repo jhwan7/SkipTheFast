@@ -38,23 +38,32 @@ class Firebase:
         return res
 
     def get_records(self, id, idtk, **kwargs):
-        if 'time' in kwargs.keys():
-            data = self.db.child('records').child(id).get(idtk).val()
-            data.popitem(last=False)
-            records = {}
-            for key, rec in data.items():
-                if 'Time' in rec:
-                    tk = rec['Time']
-                    del rec['Time'] # K, V ==> Time, rec/Time
+        data = self.db.child('records').child(id).get(idtk).val()
+        data.popitem(last=False)
+        records = {}
+        for key, rec in data.items():
+            if 'Time' in rec:
+                tk = rec['Time']
+                del rec['Time'] # K, V ==> Time, rec/Time
+                if 'time' in kwargs.keys():
                     if kwargs['time'].strftime("%Y-%m-%d %H:%M:%S").split(' ')[0] == tk.split(' ')[0]:
                         # stamp = re.findall(r"\d+", tk)   
                         records[tk] = rec
                 else:
-                    print("Passed - no time value")
-            return records
-        else:
-            return self.db.child('records').child(id).get(idtk).val()
-    
+                    records[tk] = rec
+            else:
+                print("Passed - no time value")
+        return records
+
+    def push_goal(self, id, idtk, goal):
+        res = self.db.child('users').child(id).child('goal').set(goal, idtk)
+        return res
+
+    def get_goal(self, id, idtk):
+        res = self.db.child('users').child(id).child('goal').get(idtk).val()
+        print(res)
+        return res
+   
     #
     # def send_pw_reset_email(self, email):
     #     return self.auth.send_password_reset_email(email)

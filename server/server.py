@@ -34,11 +34,21 @@ def authenticate():
 
 
 @app.route('/data', methods=['POST'])
-def get_records_by_day():
+def get_records():
     req = request.form
-    date = datetime.datetime(int(req['year']), int(req['month']), int(req['day']))
-    data = fb_server.get_records(id=req['userId'], idtk=req['idToken'], time=date)
-    return json.dumps(data)
+    has_time = [
+        "year" in req.keys(),
+        "month" in req.keys(),
+        "day" in req.keys()
+    ]
+    if  all(has_time):
+        date = datetime.datetime(int(req['year']), int(req['month']), int(req['day']))
+        data = fb_server.get_records(id=req['userId'], idtk=req['idToken'], time=date)
+        return json.dumps(data)
+    else:
+        data = fb_server.get_records(id=req['userId'], idtk=req['idToken'])
+        return json.dumps(data)
+    
 
 
 @app.route('/data', methods=['PUT'])
@@ -49,11 +59,27 @@ def push_data():
         'Feeling': req['Feeling'],
         'Food Chain': req['FoodChain'],
         'Item': req['Item'],
-        'Time': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        'Time': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        'Price': float(req['Price']),
+        'Exercise': req['Exercise']
     }
     return fb_server.push_record(id=req['userId'], idtk=req['idToken'], record=record)
 
 
+@app.route('/goal', methods=['PUT'])
+def push_goal():
+    req = request.form
+    goal = {
+        'Goal': req['Goal'],
+        'Time': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+    return fb_server.push_goal(id=req['userId'], idtk=req['idToken'], goal=goal)
+
+
+@app.route('/goal', methods=['POST'])
+def get_goal():
+    req = request.form
+    return fb_server.get_goal(id=req['userId'], idtk=req['idToken'])
 
 # @app.route('/analytic', methods=['POST'])
 # def get_analytic():
@@ -66,6 +92,4 @@ def push_data():
 if __name__ == '__main__':
     print("Running from __main__")
     app.run(host='0.0.0.0', debug=True, port=8000)
-
-
 
