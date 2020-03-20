@@ -194,10 +194,10 @@ object UserServer: ProxyServer() {
             bodyBuilder.add("userId", userId)
             bodyBuilder.add("idToken", idToken)
 
-            val putBody = bodyBuilder.build()
+            val postBody = bodyBuilder.build()
             val request = Request.Builder()
                 .url(createUserURL)
-                .put(putBody)
+                .put(postBody)
                 .build()
 
             val call = client.newCall(request)
