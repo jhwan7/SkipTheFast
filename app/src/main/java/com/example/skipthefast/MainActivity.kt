@@ -4,10 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Looper
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.example.skipthefast.Data.UserSurvey
+import com.example.skipthefast.ServerConnection.UserServer
 
 import com.example.skipthefast.ui.main.MainPagerAdapter
 
@@ -45,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -60,6 +64,33 @@ class MainActivity : AppCompatActivity() {
                 userInput.date = Date(System.currentTimeMillis())
 
                 mainListener.populateCard(userInput)
+
+                if(UserServer.isAuthenticated) {
+                    UserServer.pushData(userInput, fun(res) {
+                        Looper.prepare()
+                        if(res.isSuccessful) {
+
+                            val alertDialog = AlertDialog.Builder(this)
+                            alertDialog.setTitle("Push User Data")
+                            alertDialog.setMessage("Succesfully Pushed")
+                            alertDialog.setPositiveButton(android.R.string.yes) { dialog, which ->
+                                // Lead them back to login page
+
+                            }
+                            alertDialog.show()
+
+                        } else {
+                            val alertDialog = AlertDialog.Builder(this)
+                            alertDialog.setTitle("ERROR")
+                            alertDialog.setMessage("Error: Uncessfull in pushing user data")
+                            alertDialog.setPositiveButton(android.R.string.yes) { dialog, which ->
+                                // Lead them back to login page
+                            }
+                            alertDialog.show()
+                        }
+                        Looper.loop()
+                    })
+                }
             }
         }
 
