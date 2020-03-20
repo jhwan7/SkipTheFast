@@ -33,7 +33,7 @@ object UserServer: ProxyServer() {
     var isAuthenticated = false
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun authenticate(email:String, password:String, callback:()->Unit={}){
+    fun authenticate(email:String, password:String, callback:(Response)->Unit={}){
         if(email == "" || password == ""){
             throw Exception("Unspecified user")
         }
@@ -55,7 +55,7 @@ object UserServer: ProxyServer() {
 
             call.enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    Log.w("UserServer", "Failed to authenticate")
+                    // TODO("Display no connection message to users")
                     e.printStackTrace()
                 }
                 override fun onResponse(call: Call, response: Response) {
@@ -65,18 +65,18 @@ object UserServer: ProxyServer() {
                         idToken = bodyJSON.getString("idToken")
                         userId = bodyJSON.getString("userId")
                         isAuthenticated = true
-                        callback()
                     }
                     else{
                         Log.w("US_Auth", "Was not able to login")
                     }
+                    callback(response)
                 }
             })
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getDataByDate(year:Number, month:Number, day:Number, callback:(JSONObject)->(Unit)){
+    fun getDataByDate(year:Number, month:Number, day:Number, callback:(Response)->(Unit)){
         if(!isAuthenticated){
             throw Exception("Unauthenticated user")
         }
@@ -102,25 +102,17 @@ object UserServer: ProxyServer() {
 
             call.enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    Log.w("UserServer", "Failed to retrieve data")
-                    e.printStackTrace()
+                    // TODO("Display no connection message to users")
                 }
                 override fun onResponse(call: Call, response: Response) {
-                    if(response.isSuccessful){
-                        val responseData = response.body()?.string()
-                        val bodyJSON = JSONObject(responseData)
-                        callback(bodyJSON)
-                    }
-                    else{
-                        Log.w("US_Get", "Response not successful")
-                    }
+                    callback(response)
                 }
             })
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun pushData(category:String, feeling:Number, foodChain:String, item:String){
+    fun pushData(category:String, feeling:Number, foodChain:String, item:String, callback:(Response)->Unit){
         if(!isAuthenticated){
             throw Exception("Unauthenticated user")
         }
@@ -147,18 +139,10 @@ object UserServer: ProxyServer() {
 
             call.enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    Log.w("UserServer", "Failed to retrieve data")
-                    e.printStackTrace()
+                    // TODO("Display no connection message to users")
                 }
                 override fun onResponse(call: Call, response: Response) {
-                    if(response.isSuccessful){
-                        val responseData = response.body()?.string()
-                        val bodyJSON = JSONObject(responseData)
-                        Log.w("US_Push", bodyJSON.toString())
-                    }
-                    else{
-                        Log.w("US_Push", "Pushing data unsuccessful")
-                    }
+                    callback(response)
                 }
             })
         }

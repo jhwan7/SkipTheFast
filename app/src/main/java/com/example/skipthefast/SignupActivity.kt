@@ -1,13 +1,17 @@
 package com.example.skipthefast
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import com.example.skipthefast.ServerConnection.ProxyServer
 
 class SignupActivity : AppCompatActivity() {
 
@@ -17,6 +21,20 @@ class SignupActivity : AppCompatActivity() {
     lateinit var confirm_email_text: EditText
     lateinit var password_text: EditText
     lateinit var signup_btn: Button
+
+    fun displayFeedBack(message:String){
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.setTitle("Create User")
+        alertDialog.setMessage(message)
+        alertDialog.setPositiveButton(android.R.string.yes) { dialog, which ->
+            // Lead them back to login page
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+        alertDialog.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
@@ -36,28 +54,22 @@ class SignupActivity : AppCompatActivity() {
             val confirm_email = confirm_email_text.text.toString()
             val password = password_text.text.toString()
 
-            Log.i("console", email + confirm_email)
-            if (email != confirm_email) {
-                return@setOnClickListener
+            if (email == confirm_email) {
+                val proxy_server = ProxyServer()
+                proxy_server.createUser(email, password, fun(response){
+                    Looper.prepare()
+                    if(response.isSuccessful){
+                        displayFeedBack("Successful!")
+                    }
+                    else{
+                        displayFeedBack("Could not create new account: Please try different email or password")
+                    }
+                    Looper.loop()
+                })
             }
-            // Rest call, send data to the user
-            // Code -HERE-
-
-            // Alert User of the Successful Creation
-
-            val alertDialog = AlertDialog.Builder(this)
-                alertDialog.setTitle("Create User")
-                alertDialog.setMessage("Successfully created user")
-                alertDialog.setPositiveButton(android.R.string.yes) { dialog, which ->
-                    // Lead them back to login page
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                }
-
-            alertDialog.show()
-
-
+            else{
+                displayFeedBack("Please check email and confirmed email")
+            }
         }
-
     }
 }
