@@ -113,7 +113,7 @@ object UserServer: ProxyServer() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun pushData(userData:UserSurvey, callback:(Response)->Unit){
+    fun getData(callback:(Response)->(Unit)){
         if(!isAuthenticated){
             throw Exception("Unauthenticated user")
         }
@@ -122,12 +122,45 @@ object UserServer: ProxyServer() {
             val createUserURL = "$SERVER_URL/data"
             val bodyBuilder = FormBody.Builder()
 
-            bodyBuilder.add("Category", userData.category)
-            bodyBuilder.add("Feeling", userData.emotionToNum().toString())
-            bodyBuilder.add("FoodChain", userData.chain)
-            bodyBuilder.add("Item", userData.item)
-            bodyBuilder.add("Price", userData.price.toString())
-            bodyBuilder.add("Exercise", userData.exercise)
+            bodyBuilder.add("userId", userId)
+            bodyBuilder.add("idToken", idToken)
+
+            val postBody = bodyBuilder.build()
+
+            val request = Request.Builder()
+                .url(createUserURL)
+                .post(postBody)
+                .build()
+
+            val call = client.newCall(request)
+
+            call.enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    // TODO("Display no connection message to users")
+                }
+                override fun onResponse(call: Call, response: Response) {
+                    callback(response)
+                }
+            })
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun pushData(newData:UserSurvey, callback:(Response)->Unit){
+        if(!isAuthenticated){
+            throw Exception("Unauthenticated user")
+        }
+        else{
+            val client = OkHttpClient()
+            val createUserURL = "$SERVER_URL/data"
+            val bodyBuilder = FormBody.Builder()
+
+            bodyBuilder.add("Category", newData.category)
+            bodyBuilder.add("Feeling", newData.emotion)
+            bodyBuilder.add("FoodChain", newData.chain)
+            bodyBuilder.add("Item", newData.item)
+            bodyBuilder.add("Exercise", newData.exercise)
+            bodyBuilder.add("Price", newData.price.toString())
             bodyBuilder.add("userId", userId)
             bodyBuilder.add("idToken", idToken)
 
