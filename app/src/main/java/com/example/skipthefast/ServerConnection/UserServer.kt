@@ -147,4 +147,69 @@ object UserServer: ProxyServer() {
             })
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun pushGoal(goal:String, callback:(Response)->Unit){
+        if(!isAuthenticated){
+            throw Exception("Unauthenticated user")
+        }
+        else{
+            val client = OkHttpClient()
+            val createUserURL = "$SERVER_URL/goal"
+            val bodyBuilder = FormBody.Builder()
+
+            bodyBuilder.add("userId", userId)
+            bodyBuilder.add("idToken", idToken)
+            bodyBuilder.add("Goal", goal)
+
+            val putBody = bodyBuilder.build()
+            val request = Request.Builder()
+                .url(createUserURL)
+                .put(putBody)
+                .build()
+
+            val call = client.newCall(request)
+
+            call.enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    // TODO("Display no connection message to users")
+                }
+                override fun onResponse(call: Call, response: Response) {
+                    callback(response)
+                }
+            })
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getGoal(callback:(Response)->Unit){
+        if(!isAuthenticated){
+            throw Exception("Unauthenticated user")
+        }
+        else{
+            val client = OkHttpClient()
+            val createUserURL = "$SERVER_URL/goal"
+            val bodyBuilder = FormBody.Builder()
+
+            bodyBuilder.add("userId", userId)
+            bodyBuilder.add("idToken", idToken)
+
+            val putBody = bodyBuilder.build()
+            val request = Request.Builder()
+                .url(createUserURL)
+                .put(putBody)
+                .build()
+
+            val call = client.newCall(request)
+
+            call.enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    // TODO("Display no connection message to users")
+                }
+                override fun onResponse(call: Call, response: Response) {
+                    callback(response)
+                }
+            })
+        }
+    }
 }
