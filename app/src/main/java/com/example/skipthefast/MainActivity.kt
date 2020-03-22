@@ -1,7 +1,10 @@
 package com.example.skipthefast
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -11,7 +14,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
+import com.example.skipthefast.Data.SharedViewModel
 import com.example.skipthefast.Data.UserSurvey
 import com.example.skipthefast.ServerConnection.UserServer
 
@@ -68,10 +73,10 @@ class MainActivity : AppCompatActivity() {
 
                 mainListener.populateCard(userInput)
 
-                if(UserServer.isAuthenticated) {
+                if (UserServer.isAuthenticated) {
                     UserServer.pushData(userInput, fun(res) {
                         Looper.prepare()
-                        if(res.isSuccessful) {
+                        if (res.isSuccessful) {
                             CalendarFragment.updateCalendar(findViewById(R.id.compactcalendar_view))
                             val alertDialog = AlertDialog.Builder(this)
                             alertDialog.setTitle("Push User Data")
@@ -81,27 +86,14 @@ class MainActivity : AppCompatActivity() {
 
                             }
                             alertDialog.show()
-
-                            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            val intent = Intent(this, MainActivity::class.java).apply {
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            }
-                            val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
-
-                            val builder = NotificationCompat.Builder(this, "4")
-                                .setSmallIcon(R.drawable.ic_android_black)
-                                .setContentTitle("My notification")
-                                .setContentText("Hello World!")
-                                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                                // Set the intent that will fire when the user taps the notification
-                                .setContentIntent(pendingIntent)
-                                .setAutoCancel(true)
-
-                            with(NotificationManagerCompat.from(this)) {
-                                // notificationId is a unique int for each notification that you must define
-                                notify(4, builder.build())
-                            }
-                            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            val sharedViewModel = SharedViewModel.getInstance()
+                            sharedViewModel.setCostGoal(1)
+                            sharedViewModel.setFrequencyGoal(2)
+                            sharedViewModel.setFrequencyUser(3)
+                            sharedViewModel.setGoalUser(4)
+                            // Create Notification
+                            val intent = Intent(this, Notify::class.java)
+                            startActivityForResult(intent, LAUNCH_FORM_ACTIVITY);
 
                         } else {
                             val alertDialog = AlertDialog.Builder(this)
@@ -114,10 +106,11 @@ class MainActivity : AppCompatActivity() {
                         }
                         Looper.loop()
                     })
+
+
                 }
             }
         }
-
 
 
     }
