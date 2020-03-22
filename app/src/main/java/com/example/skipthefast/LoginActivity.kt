@@ -36,16 +36,13 @@ class LoginActivity : AppCompatActivity() {
         email = findViewById(R.id.email_login)
         password = findViewById(R.id.password_login)
         signupBtn = findViewById(R.id.signup_btn)
-        checkBox = findViewById(R.id.checkBox)
+
 
         loginBtn.setOnClickListener{
 
             // Retrieved the email, password
             val loginEmail = email.text.toString()
             val loginPassword = password.text.toString()
-
-//          Do something with check box to allow remember ability
-            val remember = checkBox.isChecked
 
 //          Edit this function to reflect backend authentication
             UserServer.authenticate(loginEmail, loginPassword, fun(res) {
