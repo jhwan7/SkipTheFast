@@ -1,6 +1,7 @@
 package com.example.skipthefast
 
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -8,6 +9,8 @@ import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.viewpager.widget.ViewPager
 import com.example.skipthefast.Data.UserSurvey
 import com.example.skipthefast.ServerConnection.UserServer
@@ -78,6 +81,27 @@ class MainActivity : AppCompatActivity() {
 
                             }
                             alertDialog.show()
+
+                            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            val intent = Intent(this, MainActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            }
+                            val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+                            val builder = NotificationCompat.Builder(this, "4")
+                                .setSmallIcon(R.drawable.ic_android_black)
+                                .setContentTitle("My notification")
+                                .setContentText("Hello World!")
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                // Set the intent that will fire when the user taps the notification
+                                .setContentIntent(pendingIntent)
+                                .setAutoCancel(true)
+
+                            with(NotificationManagerCompat.from(this)) {
+                                // notificationId is a unique int for each notification that you must define
+                                notify(4, builder.build())
+                            }
+                            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                         } else {
                             val alertDialog = AlertDialog.Builder(this)
