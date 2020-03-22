@@ -4,9 +4,24 @@ import CONST
 import json
 from collections import OrderedDict
 import re
-
+import plotly.graph_objects as go
+import plotly.io as pio
+import pdfkit
 
 class AttemptToDuplicateFirebase(Exception):pass
+
+
+def get_week():
+    date = datetime.datetime.now().date()
+    one_day = datetime.timedelta(days=1)
+    day_idx = date.weekday() % 7
+    monday = date - datetime.timedelta(days=day_idx)
+    date = monday
+    week = [date.isoformat()]
+    for n in range(6):
+        date += one_day
+        week.append(date.isoformat())
+    return week
 
 
 class Firebase:
@@ -61,8 +76,55 @@ class Firebase:
 
     def get_goal(self, id, idtk):
         res = self.db.child('users').child(id).child('goal').get(idtk).val()
-        print(res)
         return res
+
+    def dayVSrecords(self, id, idtk):
+        records = self.db.child("records").child(id).get(idtk).val()
+        dates = []
+        for key, value in records.items():
+            dates.append(value['Time'].split(" ")[0])
+        week = get_week()
+        points = {}
+        for day in week:
+            points.update({day: dates.count(day)})
+        fig = go.Figure([go.Bar(x=list(points.keys()), y=list(points.values()))])
+        fig.update_layout(title="Fast Food Orders Per Day", xaxis_title="Date (MMM-DD)", yaxis_title="Number of Orders")
+
+        # pio.write_html(fig, "graph.html")
+        # pdfkit.from_file('graph.html', 'graph.pdf')
+        fig.show()
+
+
+
+    def dayVSmoney(self, id, idtk):
+        records = self.db.child("records").child(id).get(idtk).val()
+        week = get_week()
+        points = {}
+        totalSpent = 0
+        for day in week:
+            for key, value in records.items():
+                if value['Time'].split(" ")[0] == day:
+                    totalSpent += value['Price']
+            points.update({day: totalSpent})
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=list(points.keys()), y=list(points.values()), mode='lines', name='lines'))
+        fig.update_layout(title="Fast Food Spending Throughout Week", xaxis_title="Date (MMM-DD)",
+                          yaxis_title="Cummulative Spending ($)")
+        fig.show()
+
+    def dayVScalories(self, id, idtk):
+        records = self.db.child("records").child(id).get(idtk).val()
+        week = get_week()
+        points = {}
+        for day in week:
+            dailyCalories = 0
+            for key, value in records.items():
+                if value['Time'].split(" ")[0] == day:
+                    dailyCalories += value['Calories']
+            points.update({day: dailyCalories})
+        fig = go.Figure([go.Bar(x=list(points.keys()), y=list(points.values()))])
+        fig.update_layout(title="Calories From Fast Food Per Day", xaxis_title="Date (MMM-DD)", yaxis_title="Calories")
+        fig.show()
    
     #
     # def send_pw_reset_email(self, email):
