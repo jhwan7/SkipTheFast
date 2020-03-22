@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -39,20 +40,25 @@ class Notify: AppCompatActivity() {
 
             notificationManager.createNotificationChannel(notificationChannel)
             builder = Notification.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_android_black)
+                .setSmallIcon(R.drawable.main_logo)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.main_logo))
                 .setContentTitle("SkipTheFast")
-                .setStyle(Notification.BigTextStyle().bigText("Your goal was ${sharedViewModel.getFrequencyGoal()} and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                        "You have spent total ${sharedViewModel.getCostUser()} you have ${sharedViewModel.getCostGoal() -  sharedViewModel.getCostUser()} left to spend"))
-                .setContentText("Your goal was ${sharedViewModel.getFrequencyGoal()} and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                        "You have spent total ${sharedViewModel.getCostUser()} you have ${sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend")
+                .setStyle(Notification.BigTextStyle().bigText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
+                        "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend"))
+                .setContentText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
+                        "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend")
                 // Set the intent that will fire when the user taps the notification
                 .setContentIntent(pendingIntent)
         } else {
 
             builder = Notification.Builder(this)
-                .setSmallIcon(R.drawable.ic_android_black)
-                .setContentTitle("My notification")
-                .setContentText("Hello World!")
+                .setSmallIcon(R.drawable.main_logo)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.main_logo))
+                .setContentTitle("SkipTheFast")
+                .setStyle(Notification.BigTextStyle().bigText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
+                        "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend"))
+                .setContentText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
+                        "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend")
                 // Set the intent that will fire when the user taps the notification
                 .setContentIntent(pendingIntent)
         }

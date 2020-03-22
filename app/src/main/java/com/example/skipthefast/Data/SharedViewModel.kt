@@ -26,7 +26,7 @@ class SharedViewModel {
     fun setFrequencyUser(frequency: Int) {
         this.frequencyUser = frequency
     }
-    fun setGoalUser(cost: Int) {
+    fun setCostUser(cost: Int) {
         this.costUser = cost
     }
 
