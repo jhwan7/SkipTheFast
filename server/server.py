@@ -1,4 +1,4 @@
-from flask import Flask, request # , send_file
+from flask import Flask, request, send_file
 from firebase import Firebase
 import CONST
 import datetime
@@ -87,6 +87,18 @@ def get_goal():
 #     records = fb_server.get_records(req['email'], req['password'])
 #     diagram.plot(records)
 #     return send_file('tmp.png')
+
+@app.route('/graph', methods=['POST'])
+def get_graph():
+    req = request.form
+    if req['type'] == 'r':
+        fb_server.dayVSrecords(id=req['userId'], idtk=req['idToken'])
+    if req['type'] == 'm':
+        fb_server.dayVSmoney(id=req['userId'], idtk=req['idToken'])
+    if req['type'] == 'c':
+        fb_server.dayVScalories(id=req['userId'], idtk=req['idToken'])
+
+    return send_file("graph.png")
 
 
 if __name__ == '__main__':
