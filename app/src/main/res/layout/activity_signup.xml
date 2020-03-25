@@ -11,7 +11,7 @@
         android:id="@+id/name_signup"
         android:layout_width="283dp"
         android:layout_height="50dp"
-        android:inputType="textEmailAddress"
+        android:inputType= "text"
         android:ems="10"
         android:background="@drawable/rounded_white_bg"
         android:hint="Name"
@@ -24,7 +24,7 @@
         android:id="@+id/username_signup"
         android:layout_width="283dp"
         android:layout_height="50dp"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:ems="10"
         android:background="@drawable/rounded_white_bg"
         android:hint="Username"
@@ -65,7 +65,7 @@
         android:layout_width="283dp"
         android:layout_height="50dp"
         android:ems="10"
-        android:inputType="numberPassword"
+        android:inputType="textPassword"
         android:textSize="18sp"
         android:background="@drawable/rounded_white_bg"
         android:hint="Password"
@@ -102,5 +102,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

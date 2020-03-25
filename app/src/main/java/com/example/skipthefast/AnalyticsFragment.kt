@@ -44,8 +44,10 @@ class AnalyticsFragment : Fragment() {
 
         updateBtn.setOnClickListener{view ->
             val goal = goalTextInput.text.toString()
+            val frequencyGoal = frequencyGoal.text.toString()
+            val costGoal = costGoalT.text.toString()
             Thread(Runnable {
-                UserServer.pushGoal(goal, fun(res) {
+                UserServer.pushGoal(goal + "&&&&" + frequencyGoal + "&&&&" + costGoal, fun(res) {
                     if(res.isSuccessful) {
                         println("Updated goal!");
                     }
