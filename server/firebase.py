@@ -1,14 +1,11 @@
 import datetime
 import pyrebase
 import CONST
-import json
-from collections import OrderedDict
-import re
-import plotly.graph_objects as go
-import plotly.io as pio
-import pdfkit
+import matplotlib.pyplot as plt
+import matplotlib.dates as md
 
-class AttemptToDuplicateFirebase(Exception):pass
+
+class AttemptToDuplicateFirebase(Exception): pass
 
 
 def get_week():
@@ -59,7 +56,7 @@ class Firebase:
         for key, rec in data.items():
             if 'Time' in rec:
                 tk = rec['Time']
-                del rec['Time'] # K, V ==> Time, rec/Time
+                del rec['Time']  # K, V ==> Time, rec/Time
                 if 'time' in kwargs.keys():
                     if kwargs['time'].strftime("%Y-%m-%d %H:%M:%S").split(' ')[0] == tk.split(' ')[0]:
                         # stamp = re.findall(r"\d+", tk)   
@@ -84,48 +81,72 @@ class Firebase:
         for key, value in records.items():
             dates.append(value['Time'].split(" ")[0])
         week = get_week()
-        points = {}
-        for day in week:
-            points.update({day: dates.count(day)})
-        fig = go.Figure([go.Bar(x=list(points.keys()), y=list(points.values()))])
-        fig.update_layout(title="Fast Food Orders Per Day", xaxis_title="Date (MMM-DD)", yaxis_title="Number of Orders")
 
-        # pio.write_html(fig, "graph.html")
-        # pdfkit.from_file('graph.html', 'graph.pdf')
-        fig.show()
+        x = [datetime.datetime.strptime(d, "%Y-%m-%d").date() for d in week]
+        y = [dates.count(day) for day in x]
 
-
+        ax = plt.gca()
+        formatter = md.DateFormatter("%d")
+        ax.xaxis.set_major_formatter(formatter)
+        locator = md.DayLocator()
+        ax.xaxis.set_major_locator(locator)
+        plt.xlabel("Week")
+        plt.ylabel("Number of records")
+        plt.title("Number of Records")
+        plt.ylim(0)
+        plt.plot(x, y)
+        plt.savefig("basket/r/%(id)s.png" % {'id': id})
 
     def dayVSmoney(self, id, idtk):
         records = self.db.child("records").child(id).get(idtk).val()
         week = get_week()
-        points = {}
+        x = []
+        y = []
         totalSpent = 0
         for day in week:
             for key, value in records.items():
                 if value['Time'].split(" ")[0] == day:
                     totalSpent += value['Price']
-            points.update({day: totalSpent})
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=list(points.keys()), y=list(points.values()), mode='lines', name='lines'))
-        fig.update_layout(title="Fast Food Spending Throughout Week", xaxis_title="Date (MMM-DD)",
-                          yaxis_title="Cummulative Spending ($)")
-        fig.show()
+            x.append(day)
+            y.append(totalSpent)
+
+        ax = plt.gca()
+        formatter = md.DateFormatter("%d")
+        ax.xaxis.set_major_formatter(formatter)
+        locator = md.DayLocator()
+        ax.xaxis.set_major_locator(locator)
+        plt.xlabel("Week")
+        plt.ylabel("Total spent")
+        plt.title("Total Spent")
+        plt.ylim(0)
+        plt.plot(x, y)
+        plt.savefig("basket/m/%(id)s.png" % {'id': id})
 
     def dayVScalories(self, id, idtk):
         records = self.db.child("records").child(id).get(idtk).val()
         week = get_week()
-        points = {}
+        x = []
+        y = []
         for day in week:
             dailyCalories = 0
             for key, value in records.items():
                 if value['Time'].split(" ")[0] == day:
                     dailyCalories += value['Calories']
-            points.update({day: dailyCalories})
-        fig = go.Figure([go.Bar(x=list(points.keys()), y=list(points.values()))])
-        fig.update_layout(title="Calories From Fast Food Per Day", xaxis_title="Date (MMM-DD)", yaxis_title="Calories")
-        fig.show()
-   
+            x.append(day)
+            y.append(dailyCalories)
+
+        ax = plt.gca()
+        formatter = md.DateFormatter("%d")
+        ax.xaxis.set_major_formatter(formatter)
+        locator = md.DayLocator()
+        ax.xaxis.set_major_locator(locator)
+        plt.xlabel("Week")
+        plt.ylabel("Total spent")
+        plt.title("Total Spent")
+        plt.ylim(0)
+        plt.plot(x, y)
+        plt.savefig("basket/c/%(id)s.png" % {'id': id})
+
     #
     # def send_pw_reset_email(self, email):
     #     return self.auth.send_password_reset_email(email)

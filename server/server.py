@@ -98,7 +98,7 @@ def get_graph():
     if req['type'] == 'c':
         fb_server.dayVScalories(id=req['userId'], idtk=req['idToken'])
 
-    return send_file("graph.png")
+    return send_file("basket/%(type)s/%(id)s.png" % {'id': req['userId'], 'type': req['type']})
 
 
 if __name__ == '__main__':
