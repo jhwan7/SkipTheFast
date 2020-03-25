@@ -41,7 +41,7 @@ def get_records():
         "month" in req.keys(),
         "day" in req.keys()
     ]
-    if  all(has_time):
+    if all(has_time):
         date = datetime.datetime(int(req['year']), int(req['month']), int(req['day']))
         data = fb_server.get_records(id=req['userId'], idtk=req['idToken'], time=date)
         return json.dumps(data)
