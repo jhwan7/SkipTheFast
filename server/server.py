@@ -81,12 +81,6 @@ def get_goal():
     req = request.form
     return fb_server.get_goal(id=req['userId'], idtk=req['idToken'])
 
-# @app.route('/analytic', methods=['POST'])
-# def get_analytic():
-#     req = request.form
-#     records = fb_server.get_records(req['email'], req['password'])
-#     diagram.plot(records)
-#     return send_file('tmp.png')
 
 @app.route('/graph', methods=['POST'])
 def get_graph():
@@ -95,8 +89,8 @@ def get_graph():
         fb_server.dayVSrecords(id=req['userId'], idtk=req['idToken'])
     if req['type'] == 'm':
         fb_server.dayVSmoney(id=req['userId'], idtk=req['idToken'])
-    if req['type'] == 'c':
-        fb_server.dayVScalories(id=req['userId'], idtk=req['idToken'])
+    # if req['type'] == 'c':
+    #     fb_server.dayVScalories(id=req['userId'], idtk=req['idToken'])
 
     return send_file("basket/%(type)s/%(id)s.png" % {'id': req['userId'], 'type': req['type']})
 
