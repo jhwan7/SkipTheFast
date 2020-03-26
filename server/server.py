@@ -30,6 +30,7 @@ def authenticate():
         'idToken':auth['idToken'],
         'userId':auth['localId']
     }        
+    
     return json.dumps(res)
 
 
@@ -79,7 +80,9 @@ def push_goal():
 @app.route('/goal', methods=['POST'])
 def get_goal():
     req = request.form
-    return fb_server.get_goal(id=req['userId'], idtk=req['idToken'])
+    json_data = json.dumps(fb_server.get_goal(id=req['userId'], idtk=req['idToken']))
+    print(json_data)
+    return json_data
 
 
 @app.route('/graph', methods=['POST'])
