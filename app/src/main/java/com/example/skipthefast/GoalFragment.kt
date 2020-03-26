@@ -2,29 +2,28 @@ package com.example.skipthefast
 
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import com.example.skipthefast.ServerConnection.UserServer
-import kotlinx.android.synthetic.main.fragment_analytics.*
+import kotlinx.android.synthetic.main.fragment_goal.*
 import org.json.JSONObject
 import java.lang.Exception
 
 /**
  * A simple [Fragment] subclass.
- * Use the [AnalyticsFragment.newInstance] factory method to
+ * Use the [GoalFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AnalyticsFragment : Fragment() {
+class GoalFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_analytics, container, false)
+        return inflater.inflate(R.layout.fragment_goal, container, false)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

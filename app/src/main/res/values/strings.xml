@@ -3,6 +3,7 @@
     <string name="tab_text_1">Journey</string>
     <string name="tab_text_2">Calendar</string>
     <string name="tab_text_3">Goal</string>
+    <string name="tab_text_4">Analytics</string>
 
     <string name="sign_up"><u>Don\'t have an account?</u></string>
     <string name="sign_in">Sign In</string>
