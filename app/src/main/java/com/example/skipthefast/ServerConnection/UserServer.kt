@@ -1,5 +1,7 @@
 package com.example.skipthefast.ServerConnection
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -244,6 +246,48 @@ object UserServer: ProxyServer() {
                 }
                 override fun onResponse(call: Call, response: Response) {
                     callback(response)
+                }
+            })
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getGraph(type:Char, callback:(Response)->Unit){
+        if(!isAuthenticated){
+            throw Exception("Unauthenticated user")
+        }
+        else{
+            val client = OkHttpClient()
+            val createUserURL = "$SERVER_URL/graph"
+            val bodyBuilder = FormBody.Builder()
+
+            bodyBuilder.add("type", type.toString())
+            bodyBuilder.add("userId", userId)
+            bodyBuilder.add("idToken", idToken)
+
+            val postBody = bodyBuilder.build()
+
+            val request = Request.Builder()
+                .url(createUserURL)
+                .post(postBody)
+                .build()
+
+            val call = client.newCall(request)
+
+            call.enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.w("UserServer", "Failed to retrieve data")
+                    e.printStackTrace()
+                }
+                override fun onResponse(call: Call, response: Response) {
+                    callback(response)
+//                    if(response.isSuccessful){
+//                        val responseData = response.body()?.byteStream()
+//                        val bitmap = BitmapFactory.decodeStream(responseData)
+//                        callback(bitmap)
+//                    }
+//                    else{
+//                        Log.w("US_Push", "Pushing data unsuccessful")
+//                    }
                 }
             })
         }
