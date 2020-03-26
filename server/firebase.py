@@ -79,7 +79,10 @@ class Firebase:
         records = self.db.child("records").child(id).get(idtk).val()
         dates = []
         for key, value in records.items():
-            dates.append(value['Time'].split(" ")[0])
+            try:
+                dates.append(value['Time'].split(" ")[0])
+            except:
+                pass
         week = get_week()
 
         x = [datetime.datetime.strptime(d, "%Y-%m-%d").date() for d in week]
@@ -105,8 +108,11 @@ class Firebase:
         totalSpent = 0
         for day in week:
             for key, value in records.items():
-                if value['Time'].split(" ")[0] == day:
-                    totalSpent += value['Price']
+                try:
+                    if value['Time'].split(" ")[0] == day:
+                        totalSpent += value['Price']
+                except:
+                    pass
             x.append(day)
             y.append(totalSpent)
 
