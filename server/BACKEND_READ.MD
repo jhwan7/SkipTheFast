@@ -11,14 +11,14 @@
 # FB Data Schema
 ```json
 root: {
-    user_id:{
-       push_key_initial: "None",
-       push_key:{
-          Category: %s,
-          Feeling: %d,
-          FoodChain: $s,
-          Item: %s,
-          Time: %YYYY:%MM:%DD %HH:%MM:%SS
+    "user_id":{
+       "push_key_initial": "None",
+       "push_key":{
+          "Category": %s,
+          "Feeling": %d,
+          "FoodChain": $s,
+          "Item": %s,
+          "Time": %YYYY:%MM:%DD %HH:%MM:%SS
        }    
     }
  }
