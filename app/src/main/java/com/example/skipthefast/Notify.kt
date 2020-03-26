@@ -9,11 +9,22 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.os.Looper
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.skipthefast.Data.SharedViewModel
+import com.example.skipthefast.Data.UserSurvey
+import com.example.skipthefast.ServerConnection.UserServer
+import kotlinx.android.synthetic.main.fragment_analytics.*
+import org.json.JSONObject
+import java.lang.Exception
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class Notify: AppCompatActivity() {
 
@@ -23,7 +34,58 @@ class Notify: AppCompatActivity() {
     private val channelId = "com.example.skipthefast"
     private val description = "test"
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getWeekSum() {
 
+        var costSum = 0f
+        var freqCount = 0;
+        val calendar = Calendar.getInstance()
+
+        UserServer.getData(fun(res) {
+
+            Looper.prepare()
+
+            val data = JSONObject(res.body()!!.string())
+
+            data.keys().forEachRemaining { dateStr ->
+                run {
+                    val date: Date = Date.from(
+                        LocalDateTime.parse(
+                            dateStr,
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        ).atZone(ZoneId.systemDefault()).toInstant()
+                    )
+                    val userInput = UserSurvey(data.get(dateStr) as JSONObject, date)
+
+                    calendar.add(Calendar.DAY_OF_YEAR, -7)
+
+                    if (userInput.date > calendar.time) {
+                        costSum += userInput.price
+                        freqCount++
+                    }
+                }
+            }
+
+            Looper.loop()
+        })
+
+        UserServer.getGoal(fun(res) {
+            Looper.prepare()
+
+            try {
+                val data = JSONObject(res.body()!!.string())
+                //data.get("Goal")
+            } catch (ex: Exception) {
+                println("Error getting goal");
+            }
+
+            Looper.loop()
+        })
+
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,6 +95,8 @@ class Notify: AppCompatActivity() {
 
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        getWeekSum()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationChannel = NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)

@@ -60,10 +60,26 @@ class JourneyFragment : Fragment(), MainActivity.ListenFromActivity {
                         )
                     }
                 }
+                /*calculateWeeklySpending()*/
             })
         }).start()
 
     }
+
+/*    fun calculateWeeklySpending() {
+        var costSum = 0f
+        var freqCount = 0;
+
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, -7)
+
+        userInputs.forEach {
+            if (it.date > calendar.time) {
+                costSum += it.price
+                freqCount++
+            }
+        }
+    }*/
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun populateCard(userInput: UserSurvey, updateDB: Boolean) {
