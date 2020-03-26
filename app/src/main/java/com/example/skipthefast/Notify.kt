@@ -12,13 +12,9 @@ import android.os.Bundle
 import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.example.skipthefast.Data.SharedViewModel
 import com.example.skipthefast.Data.UserSurvey
 import com.example.skipthefast.ServerConnection.UserServer
-import kotlinx.android.synthetic.main.fragment_analytics.*
 import org.json.JSONObject
 import java.lang.Exception
 import java.time.LocalDateTime
@@ -34,55 +30,9 @@ class Notify: AppCompatActivity() {
     private val channelId = "com.example.skipthefast"
     private val description = "test"
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getWeekSum() {
+    private var costSum = 0f
+    private var freqCount = 0
 
-        var costSum = 0f
-        var freqCount = 0;
-        val calendar = Calendar.getInstance()
-
-        UserServer.getData(fun(res) {
-
-            Looper.prepare()
-
-            val data = JSONObject(res.body()!!.string())
-
-            data.keys().forEachRemaining { dateStr ->
-                run {
-                    val date: Date = Date.from(
-                        LocalDateTime.parse(
-                            dateStr,
-                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                        ).atZone(ZoneId.systemDefault()).toInstant()
-                    )
-                    val userInput = UserSurvey(data.get(dateStr) as JSONObject, date)
-
-                    calendar.add(Calendar.DAY_OF_YEAR, -7)
-
-                    if (userInput.date > calendar.time) {
-                        costSum += userInput.price
-                        freqCount++
-                    }
-                }
-            }
-
-            Looper.loop()
-        })
-
-        UserServer.getGoal(fun(res) {
-            Looper.prepare()
-
-            try {
-                val data = JSONObject(res.body()!!.string())
-                //data.get("Goal")
-            } catch (ex: Exception) {
-                println("Error getting goal");
-            }
-
-            Looper.loop()
-        })
-
-    }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -90,47 +40,104 @@ class Notify: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val sharedViewModel = SharedViewModel.getInstance()
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val calendar = Calendar.getInstance()
 
-        val intent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        UserServer.getData(fun(res) {
 
-        getWeekSum()
+            Looper.prepare()
+            if(res.isSuccessful) {
+                val data = JSONObject(res.body()!!.string())
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel = NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
-            notificationChannel.enableVibration(true)
+                // Get user data first
+                data.keys().forEachRemaining { dateStr ->
+                    run {
+                        val date: Date = Date.from(
+                            LocalDateTime.parse(
+                                dateStr,
+                                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                            ).atZone(ZoneId.systemDefault()).toInstant()
+                        )
+                        val userInput = UserSurvey(data.get(dateStr) as JSONObject, date)
 
-            notificationManager.createNotificationChannel(notificationChannel)
-            builder = Notification.Builder(this, channelId)
-                .setSmallIcon(R.drawable.main_logo)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.main_logo))
-                .setContentTitle("SkipTheFast")
-                .setStyle(Notification.BigTextStyle().bigText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                        "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend"))
-                .setContentText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                        "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend")
-                // Set the intent that will fire when the user taps the notification
-                .setContentIntent(pendingIntent)
-        } else {
+                        calendar.add(Calendar.DAY_OF_YEAR, -7)
 
-            builder = Notification.Builder(this)
-                .setSmallIcon(R.drawable.main_logo)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.main_logo))
-                .setContentTitle("SkipTheFast")
-                .setStyle(Notification.BigTextStyle().bigText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                        "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend"))
-                .setContentText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                        "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend")
-                // Set the intent that will fire when the user taps the notification
-                .setContentIntent(pendingIntent)
-        }
+                        if (userInput.date > calendar.time) {
+                            costSum += userInput.price
+                            freqCount++
+                        }
 
-        notificationManager.notify(1234, builder.build());
+                    }
+                }
+                var sharedViewModel = SharedViewModel.getInstance()
+                sharedViewModel.setCostUser(costSum)
+                sharedViewModel.setFrequencyUser(freqCount)
+                println("User data Retrieved" + sharedViewModel.getCostUser() + sharedViewModel.getFrequencyUser())
+                UserServer.getGoal(fun(res) {
+                    Looper.prepare()
+                    if(res.isSuccessful) {
+                        var body = res.body()!!.string()
+                            println("Data " + body)
+                            // Initialize User Goal Here
+                            val data = JSONObject(body)
+//                            val goal = data.getJSONObject("Goal")
+                            println("Goal Retrieved")
+                            println(data)
+                           val goals = data.get("Goal").toString().split("&&&&")
+                            println(goals.toString())
+                            // END
+                        sharedViewModel.setFrequencyGoal(goals[1].toInt())
+                        sharedViewModel.setCostGoal(goals[2].toFloat())
+                            // Notification Implementation
+                            val sharedViewModel = SharedViewModel.getInstance()
+                            notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val nextState = Intent(this, MainActivity::class.java)
-        startActivityForResult(nextState, 1);
+                            val intent = Intent(this, MainActivity::class.java)
+                            val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                notificationChannel = NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
+                                notificationChannel.enableVibration(true)
+
+                                notificationManager.createNotificationChannel(notificationChannel)
+                                builder = Notification.Builder(this, channelId)
+                                    .setSmallIcon(R.drawable.main_logo)
+                                    .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.main_logo))
+                                    .setContentTitle("SkipTheFast")
+                                    .setStyle(Notification.BigTextStyle().bigText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
+                                            "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend"))
+                                    .setContentText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
+                                            "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend")
+                                    // Set the intent that will fire when the user taps the notification
+                                    .setContentIntent(pendingIntent)
+                            } else {
+
+                                builder = Notification.Builder(this)
+                                    .setSmallIcon(R.drawable.main_logo)
+                                    .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.main_logo))
+                                    .setContentTitle("SkipTheFast")
+                                    .setStyle(Notification.BigTextStyle().bigText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
+                                            "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend"))
+                                    .setContentText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
+                                            "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend")
+                                    // Set the intent that will fire when the user taps the notification
+                                    .setContentIntent(pendingIntent)
+                            }
+
+
+                            notificationManager.notify(1234, builder.build());
+                            // END
+                            println("Returning to Main")
+                            // Return to main activity
+                            val nextState = Intent(this, MainActivity::class.java)
+                            startActivityForResult(nextState, 1);
+
+                    }
+                    Looper.loop()
+                })
+            }
+            Looper.loop()
+
+        })
     }
 
 

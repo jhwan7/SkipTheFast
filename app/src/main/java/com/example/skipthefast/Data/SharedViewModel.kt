@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 
 class SharedViewModel {
     private var frequencyGoal = 0
-    private var costGoal = 0
+    private var costGoal = 0f
     private var frequencyUser = 0
-    private var costUser = 0
+    private var costUser = 0f
 
 
 
@@ -20,26 +20,26 @@ class SharedViewModel {
     fun setFrequencyGoal(frequency: Int) {
         this.frequencyGoal = frequency
     }
-    fun setCostGoal(cost: Int) {
+    fun setCostGoal(cost: Float) {
         this.costGoal = cost
     }
     fun setFrequencyUser(frequency: Int) {
         this.frequencyUser = frequency
     }
-    fun setCostUser(cost: Int) {
+    fun setCostUser(cost: Float) {
         this.costUser = cost
     }
 
     fun getFrequencyGoal(): Int {
         return this.frequencyGoal
     }
-    fun getCostGoal(): Int {
+    fun getCostGoal(): Float {
         return this.costGoal
     }
     fun getFrequencyUser(): Int {
         return this.frequencyUser
     }
-    fun getCostUser(): Int {
+    fun getCostUser(): Float {
         return this.costUser
     }
 

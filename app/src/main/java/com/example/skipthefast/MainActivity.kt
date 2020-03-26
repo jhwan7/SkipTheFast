@@ -86,11 +86,7 @@ class MainActivity : AppCompatActivity() {
 
                             }
                             alertDialog.show()
-                            val sharedViewModel = SharedViewModel.getInstance()
-                            sharedViewModel.setCostGoal(4)
-                            sharedViewModel.setFrequencyGoal(2)
-                            sharedViewModel.setFrequencyUser(3)
-                            sharedViewModel.setCostUser(2)
+
                             // Create Notification
                             val intent = Intent(this, Notify::class.java)
                             startActivityForResult(intent, LAUNCH_FORM_ACTIVITY);
