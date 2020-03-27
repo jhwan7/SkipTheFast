@@ -81,6 +81,10 @@ class Firebase:
 
     def get_goal(self, id, idtk):
         res = self.db.child('users').child(id).child('goal').get(idtk).val()
+        if res == None:
+            return {
+                "Goal":"None"
+            }
         return res
 
     def dayVSrecords(self, id, idtk):
