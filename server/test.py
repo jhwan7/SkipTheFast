@@ -89,3 +89,5 @@ def test_get_graph(test_client):
 
     data_response = test_client.post('/data', data={'userId': id, 'idToken': idtk, 'Goal':'Push up every day', 'type':'r'})
     assert data_response.status_code == 200
+    data_response = test_client.post('/data', data={'userId': id, 'idToken': idtk, 'Goal': 'Push up every day', 'type': 'm'})
+    assert data_response.status_code == 200
