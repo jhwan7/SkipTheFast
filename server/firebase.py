@@ -4,6 +4,9 @@ import CONST
 import matplotlib.pyplot as plt
 import matplotlib.dates as md
 
+from matplotlib.figure import Figure
+from io import BytesIO
+import base64
 
 class AttemptToDuplicateFirebase(Exception): pass
 
@@ -83,7 +86,7 @@ class Firebase:
     def dayVSrecords(self, id, idtk):
         records = self.db.child("records").child(id).get(idtk).val()
         
-        dates = get_week();
+        dates = get_week()
         acc_counts = []
         
         total_daily_count = 0
@@ -157,6 +160,50 @@ class Firebase:
         plt.plot(x, y, color='green', alpha=0.7)
         plt.savefig("basket/m/%(id)s.png" % {'id': id})
         plt.cla()
+
+    def graph_proper(self):
+        records = self.db.child("records").child(id).get(idtk).val()
+
+        dates = get_week()
+        acc_counts = []
+
+        total_daily_count = 0
+        for day in dates:
+            for record in records.values():
+                try:
+                    recorded_date = record['Time'].split(" ")[0]
+                    if day == recorded_date:
+                        total_daily_count += 1
+                except:
+                    pass
+            acc_counts.append(total_daily_count)
+
+        x = [datetime.datetime.strptime(d, "%Y-%m-%d").date() for d in dates]
+        y = acc_counts
+
+        fig = Figure()
+        ax = fig.subplots()
+        ax.set_facecolor('xkcd:salmon')
+        formatter = md.DateFormatter("%d")
+        ax.xaxis.set_major_formatter(formatter)
+        locator = md.DayLocator()
+        ax.xaxis.set_major_locator(locator)
+        ax.xlabel("Week")
+        ax.ylabel("Number of records")
+        ax.title("Number of Records")
+        ax.ylim(0, total_daily_count + 4)
+        ax.set_axisbelow(True)
+        ax.grid(color='w', linestyle='-', linewidth=0.5)
+        ax.fill_between(x, y, facecolor='white')
+        ax.fill_between(x, y, facecolor= 'yellow', alpha=0.5)
+        ax.plot(x, y, color='yellow', alpha=0.7)
+        # ax.savefig("basket/r/%(id)s.png" % {'id': id})
+
+        buf = BytesIO()
+        fig.savefig(buf, format="png")
+        # data = base64.b64encode(buf.getBuffer()).decode('ascii')
+        # return f"<img src='data:image/png;base64, {data}"
+        return buf
 
 
     # def dayVScalories(self, id, idtk):
