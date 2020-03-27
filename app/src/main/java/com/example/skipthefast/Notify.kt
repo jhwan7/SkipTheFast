@@ -22,7 +22,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class Notify: AppCompatActivity() {
+class Notify : AppCompatActivity() {
 
     lateinit var notificationManager: NotificationManager
     lateinit var notificationChannel: NotificationChannel
@@ -32,7 +32,6 @@ class Notify: AppCompatActivity() {
 
     private var costSum = 0f
     private var freqCount = 0
-
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -45,7 +44,7 @@ class Notify: AppCompatActivity() {
         UserServer.getData(fun(res) {
 
             Looper.prepare()
-            if(res.isSuccessful) {
+            if (res.isSuccessful) {
                 val data = JSONObject(res.body()!!.string())
 
                 // Get user data first
@@ -74,51 +73,97 @@ class Notify: AppCompatActivity() {
                 println("User data Retrieved" + sharedViewModel.getCostUser() + sharedViewModel.getFrequencyUser())
                 UserServer.getGoal(fun(res) {
                     Looper.prepare()
-                    if(res.isSuccessful) {
+                    if (res.isSuccessful) {
                         var body = res.body()!!.string()
-                            println("Data " + body)
-                            // Initialize User Goal Here
-                            val data = JSONObject(body)
+                        println("Data " + body)
+                        // Initialize User Goal Here
+                        val data = JSONObject(body)
 //                            val goal = data.getJSONObject("Goal")
-                            println("Goal Retrieved")
-                            println(data)
-                           val goals = data.get("Goal").toString().split("&&&&")
-                            println(goals.toString())
-                            // END
-                        sharedViewModel.setFrequencyGoal(goals[1].toInt())
-                        sharedViewModel.setCostGoal(goals[2].toFloat())
+                        println("Goal Retrieved")
+                        println(data)
+                        // No goal
+
+                        val goals = data.get("Goal").toString().split("&&&&")
+                        println(goals.toString())
+                        if (goals[0] == "None") {
+                            println("No Response " + goals[0])
+                            val nextState = Intent(this, MainActivity::class.java)
+                            startActivityForResult(nextState, 1);
+                        } else {
+                            sharedViewModel.setFrequencyGoal(goals[1].toInt())
+                            sharedViewModel.setCostGoal(goals[2].toFloat())
                             // Notification Implementation
                             val sharedViewModel = SharedViewModel.getInstance()
-                            notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                            notificationManager =
+                                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
                             val intent = Intent(this, MainActivity::class.java)
-                            val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                            val pendingIntent = PendingIntent.getActivity(
+                                this,
+                                0,
+                                intent,
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                            )
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                notificationChannel = NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
+                                notificationChannel = NotificationChannel(
+                                    channelId,
+                                    description,
+                                    NotificationManager.IMPORTANCE_HIGH
+                                )
                                 notificationChannel.enableVibration(true)
 
                                 notificationManager.createNotificationChannel(notificationChannel)
                                 builder = Notification.Builder(this, channelId)
                                     .setSmallIcon(R.drawable.main_logo)
-                                    .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.main_logo))
+                                    .setLargeIcon(
+                                        BitmapFactory.decodeResource(
+                                            resources,
+                                            R.drawable.main_logo
+                                        )
+                                    )
                                     .setContentTitle("SkipTheFast")
-                                    .setStyle(Notification.BigTextStyle().bigText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                                            "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend"))
-                                    .setContentText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                                            "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend")
+                                    .setStyle(
+                                        Notification.BigTextStyle().bigText(
+                                            "Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
+                                                    "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${sharedViewModel.getCostGoal().minus(
+                                                        sharedViewModel.getCostUser()
+                                                    )} left to spend"
+                                        )
+                                    )
+                                    .setContentText(
+                                        "Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
+                                                "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${sharedViewModel.getCostGoal().minus(
+                                                    sharedViewModel.getCostUser()
+                                                )} left to spend"
+                                    )
                                     // Set the intent that will fire when the user taps the notification
                                     .setContentIntent(pendingIntent)
                             } else {
 
                                 builder = Notification.Builder(this)
                                     .setSmallIcon(R.drawable.main_logo)
-                                    .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.main_logo))
+                                    .setLargeIcon(
+                                        BitmapFactory.decodeResource(
+                                            resources,
+                                            R.drawable.main_logo
+                                        )
+                                    )
                                     .setContentTitle("SkipTheFast")
-                                    .setStyle(Notification.BigTextStyle().bigText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                                            "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend"))
-                                    .setContentText("Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                                            "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${ sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())} left to spend")
+                                    .setStyle(
+                                        Notification.BigTextStyle().bigText(
+                                            "Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
+                                                    "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${sharedViewModel.getCostGoal().minus(
+                                                        sharedViewModel.getCostUser()
+                                                    )} left to spend"
+                                        )
+                                    )
+                                    .setContentText(
+                                        "Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
+                                                "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${sharedViewModel.getCostGoal().minus(
+                                                    sharedViewModel.getCostUser()
+                                                )} left to spend"
+                                    )
                                     // Set the intent that will fire when the user taps the notification
                                     .setContentIntent(pendingIntent)
                             }
@@ -128,8 +173,8 @@ class Notify: AppCompatActivity() {
                             // END
                             println("Returning to Main")
                             // Return to main activity
-                            val nextState = Intent(this, MainActivity::class.java)
-                            startActivityForResult(nextState, 1);
+
+                        }
 
                     }
                     Looper.loop()
