@@ -25,7 +25,6 @@ class AnalyticFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        user_analytics
 
         Thread(Runnable {
             UserServer.getGraph('r', fun(res) {
@@ -33,7 +32,18 @@ class AnalyticFragment : Fragment() {
                     val responseData = res.body()?.byteStream()
                     val bitmap = BitmapFactory.decodeStream(responseData)
                     activity!!.runOnUiThread(fun() {
-                        user_analytics.setImageBitmap(bitmap)
+                        user_freq.setImageBitmap(bitmap)
+                    })
+                } else {
+                    Log.w("US_Push", "Pushing data unsuccessful")
+                }
+            })
+            UserServer.getGraph('m', fun(res) {
+                if (res.isSuccessful) {
+                    val responseData = res.body()?.byteStream()
+                    val bitmap = BitmapFactory.decodeStream(responseData)
+                    activity!!.runOnUiThread(fun() {
+                        user_expense.setImageBitmap(bitmap)
                     })
                 } else {
                     Log.w("US_Push", "Pushing data unsuccessful")

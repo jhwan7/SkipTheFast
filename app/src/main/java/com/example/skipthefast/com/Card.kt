@@ -122,13 +122,6 @@ class Card(context: Context, userSurvey: UserSurvey) {
         titleText.setTextColor(Color.parseColor("#0F0101"))
         titleText.textSize = 16f
 
-        /*bodyText.layoutParams = textParams
-        bodyText.text = "Could be better"
-        bodyText.setTypeface(bodyText.typeface, Typeface.BOLD)
-        bodyText.y = 7f
-        bodyText.setTextColor(Color.parseColor("#707070"))
-        bodyText.textSize = 12f*/
-
         childContainer.addView(dateText)
         childContainer.addView(titleText)
         childContainer.addView(bodyText)
@@ -138,11 +131,6 @@ class Card(context: Context, userSurvey: UserSurvey) {
         parentContainer.addView(exerciseImage)
         parentContainer.addView(childContainer)
         card.addView(parentContainer)
-
-        /*
-        * FOR EHWAN: Refer to this document https://developer.android.com/guide/topics/ui/dialogs
-        * find a way to show modal with user input detail on click of this card variable I created
-        * */
 
         return card
     }
