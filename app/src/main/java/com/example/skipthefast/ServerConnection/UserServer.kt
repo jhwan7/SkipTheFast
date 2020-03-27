@@ -34,6 +34,7 @@ object UserServer: ProxyServer() {
     private var idToken = ""
     private var userId = ""
     var isAuthenticated = false
+    var isTest = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun authenticate(email:String, password:String, callback:(Response)->Unit={}){
@@ -80,7 +81,7 @@ object UserServer: ProxyServer() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDataByDate(year:Number, month:Number, day:Number, callback:(Response)->(Unit)){
-        if(!isAuthenticated){
+        if(!isAuthenticated && !isTest){
             throw Exception("Unauthenticated user")
         }
         else{
@@ -116,7 +117,7 @@ object UserServer: ProxyServer() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getData(callback:(Response)->(Unit)){
-        if(!isAuthenticated){
+        if(!isAuthenticated && !isTest){
             throw Exception("Unauthenticated user")
         }
         else{
@@ -149,7 +150,7 @@ object UserServer: ProxyServer() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun pushData(newData:UserSurvey, callback:(Response)->Unit){
-        if(!isAuthenticated){
+        if(!isAuthenticated && !isTest){
             throw Exception("Unauthenticated user")
         }
         else{
@@ -188,7 +189,7 @@ object UserServer: ProxyServer() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun pushGoal(goal:String, callback:(Response)->Unit){
-        if(!isAuthenticated){
+        if(!isAuthenticated && !isTest){
             throw Exception("Unauthenticated user")
         }
         else{
@@ -221,7 +222,7 @@ object UserServer: ProxyServer() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getGoal(callback:(Response)->Unit){
-        if(!isAuthenticated){
+        if(!isAuthenticated && !isTest){
             throw Exception("Unauthenticated user")
         }
         else{
@@ -252,7 +253,7 @@ object UserServer: ProxyServer() {
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getGraph(type:Char, callback:(Response)->Unit){
-        if(!isAuthenticated){
+        if(!isAuthenticated && !isTest){
             throw Exception("Unauthenticated user")
         }
         else{

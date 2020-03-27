@@ -41,29 +41,30 @@ class JourneyFragment : Fragment(), MainActivity.ListenFromActivity {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Thread(Runnable {
-            UserServer.getData(fun(res) {
-                val data = JSONObject(res.body()!!.string())
+        if (!UserServer.isTest) {
+            Thread(Runnable {
+                UserServer.getData(fun(res) {
+                    val data = JSONObject(res.body()!!.string())
 
-                data.keys().forEachRemaining { dateStr ->
-                    run {
-                        val date: Date = Date.from(
-                            LocalDateTime.parse(
-                                dateStr,
-                                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                            ).atZone(ZoneId.systemDefault()).toInstant()
-                        )
-                        val userInput = UserSurvey(data.get(dateStr) as JSONObject, date)
-                        activity!!.runOnUiThread(java.lang.Runnable {
-                            populateCard(userInput, false)
+                    data.keys().forEachRemaining { dateStr ->
+                        run {
+                            val date: Date = Date.from(
+                                LocalDateTime.parse(
+                                    dateStr,
+                                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                                ).atZone(ZoneId.systemDefault()).toInstant()
+                            )
+                            val userInput = UserSurvey(data.get(dateStr) as JSONObject, date)
+                            activity!!.runOnUiThread(java.lang.Runnable {
+                                populateCard(userInput, false)
+                            }
+                            )
                         }
-                        )
                     }
-                }
-                /*calculateWeeklySpending()*/
-            })
-        }).start()
-
+                    /*calculateWeeklySpending()*/
+                })
+            }).start()
+        }
     }
 
 /*    fun calculateWeeklySpending() {
