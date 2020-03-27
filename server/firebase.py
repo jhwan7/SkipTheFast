@@ -9,15 +9,20 @@ class AttemptToDuplicateFirebase(Exception): pass
 
 
 def get_week():
-    date = datetime.datetime.now().date()
-    one_day = datetime.timedelta(days=1)
-    day_idx = date.weekday() % 7
-    monday = date - datetime.timedelta(days=day_idx)
-    date = monday
-    week = [date.isoformat()]
-    for n in range(6):
-        date += one_day
-        week.append(date.isoformat())
+    # date = datetime.datetime.now().date()
+    # one_day = datetime.timedelta(days=1)
+    # day_idx = date.weekday() % 7
+    # monday = date - datetime.timedelta(days=day_idx)
+    # date = monday
+    # week = [date.isoformat()]
+    # for n in range(6):
+    #     date += one_day
+    #     week.append(date.isoformat())
+    today = datetime.date.today()
+    week = []
+    for i in range(7):
+        week.append((today - datetime.timedelta(days=6-i)).isoformat())
+        
     return week
 
 
@@ -77,18 +82,27 @@ class Firebase:
 
     def dayVSrecords(self, id, idtk):
         records = self.db.child("records").child(id).get(idtk).val()
-        dates = []
-        for key, value in records.items():
-            try:
-                dates.append(value['Time'].split(" ")[0])
-            except:
-                pass
-        week = get_week()
+        
+        dates = get_week();
+        acc_counts = []
+        
+        total_daily_count = 0
+        for day in dates:
+            for record in records.values():
+                try:
+                    recorded_date = record['Time'].split(" ")[0]
+                    if day == recorded_date:
+                        total_daily_count += 1
+                except: 
+                    pass
+            acc_counts.append(total_daily_count)        
+            
+        x = [datetime.datetime.strptime(d, "%Y-%m-%d").date() for d in dates]
+        y = acc_counts
 
-        x = [datetime.datetime.strptime(d, "%Y-%m-%d").date() for d in week]
-        y = [dates.count(day) for day in x]
-
+        plt.cla()
         ax = plt.gca()
+        ax.set_facecolor('xkcd:salmon')
         formatter = md.DateFormatter("%d")
         ax.xaxis.set_major_formatter(formatter)
         locator = md.DayLocator()
@@ -96,62 +110,79 @@ class Firebase:
         plt.xlabel("Week")
         plt.ylabel("Number of records")
         plt.title("Number of Records")
-        plt.ylim(0)
-        plt.plot(x, y)
+        plt.ylim(0, total_daily_count + 4)
+        ax.set_axisbelow(True)
+        plt.grid(color='w', linestyle='-', linewidth=0.5)
+        plt.fill_between(x, y, facecolor='white')
+        plt.fill_between(x, y, facecolor= 'yellow', alpha=0.5)
+        plt.plot(x, y, color='yellow', alpha=0.7)
         plt.savefig("basket/r/%(id)s.png" % {'id': id})
+        plt.cla()
+
 
     def dayVSmoney(self, id, idtk):
         records = self.db.child("records").child(id).get(idtk).val()
-        week = get_week()
-        x = []
-        y = []
-        totalSpent = 0
-        for day in week:
+        dates = get_week()
+
+        spents = []
+        total_spent = 0
+        
+        for day in dates:
             for key, value in records.items():
                 try:
                     if value['Time'].split(" ")[0] == day:
-                        totalSpent += value['Price']
+                        total_spent += value['Price']
                 except:
                     pass
-            x.append(day)
-            y.append(totalSpent)
-
+            spents.append(total_spent)
+        
+        x = [datetime.datetime.strptime(d, "%Y-%m-%d").date() for d in dates]
+        y = spents
+        
+        plt.cla()
         ax = plt.gca()
+        ax.set_facecolor('xkcd:salmon')
         formatter = md.DateFormatter("%d")
         ax.xaxis.set_major_formatter(formatter)
         locator = md.DayLocator()
         ax.xaxis.set_major_locator(locator)
         plt.xlabel("Week")
-        plt.ylabel("Total spent")
-        plt.title("Total Spent")
-        plt.ylim(0)
-        plt.plot(x, y)
+        plt.ylabel("Total Spent")
+        plt.title("Weekly Total Spent")
+        plt.ylim(0, total_spent + 5)
+        ax.set_axisbelow(True)
+        plt.grid(color='w', linestyle='-', linewidth=0.5)
+        plt.fill_between(x, y, facecolor='white')
+        plt.fill_between(x, y, facecolor='green', alpha=0.5)
+        plt.plot(x, y, color='green', alpha=0.7)
         plt.savefig("basket/m/%(id)s.png" % {'id': id})
+        plt.cla()
 
-    def dayVScalories(self, id, idtk):
-        records = self.db.child("records").child(id).get(idtk).val()
-        week = get_week()
-        x = []
-        y = []
-        for day in week:
-            dailyCalories = 0
-            for key, value in records.items():
-                if value['Time'].split(" ")[0] == day:
-                    dailyCalories += value['Calories']
-            x.append(day)
-            y.append(dailyCalories)
 
-        ax = plt.gca()
-        formatter = md.DateFormatter("%d")
-        ax.xaxis.set_major_formatter(formatter)
-        locator = md.DayLocator()
-        ax.xaxis.set_major_locator(locator)
-        plt.xlabel("Week")
-        plt.ylabel("Total spent")
-        plt.title("Total Spent")
-        plt.ylim(0)
-        plt.plot(x, y)
-        plt.savefig("basket/c/%(id)s.png" % {'id': id})
+    # def dayVScalories(self, id, idtk):
+    #     records = self.db.child("records").child(id).get(idtk).val()
+    #     week = get_week()
+    #     x = []
+    #     y = []
+    #     for day in week:
+    #         dailyCalories = 0
+    #         for key, value in records.items():
+    #             if value['Time'].split(" ")[0] == day:
+    #                 dailyCalories += value['Calories']
+    #         x.append(day)
+    #         y.append(dailyCalories)
+
+    #     ax = plt.gca()
+    #     formatter = md.DateFormatter("%d")
+    #     ax.xaxis.set_major_formatter(formatter)
+    #     locator = md.DayLocator()
+    #     ax.xaxis.set_major_locator(locator)
+    #     plt.xlabel("Week")
+    #     plt.ylabel("Total spent")
+    #     plt.title("Total Spent")
+    #     plt.ylim(0)
+    #     plt.plot(x, y)
+    #     plt.savefig("basket/c/%(id)s.png" % {'id': id})
 
     #
     # def send_pw_reset_email(self, email):
