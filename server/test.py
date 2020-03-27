@@ -87,5 +87,5 @@ def test_get_graph(test_client):
     idtk = auth_json['idToken']
     id = auth_json['userId']
 
-    data_response = test_client.post('/data', data={'userId': id, 'idToken': idtk, 'Goal':'Push up every day', 'type'='r'})
+    data_response = test_client.post('/data', data={'userId': id, 'idToken': idtk, 'Goal':'Push up every day', 'type':'r'})
     assert data_response.status_code == 200
