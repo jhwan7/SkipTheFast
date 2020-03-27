@@ -161,7 +161,7 @@ class Firebase:
         plt.savefig("basket/m/%(id)s.png" % {'id': id})
         plt.cla()
 
-    def graph_proper(self):
+    def graph_proper(self, id, idtk):
         records = self.db.child("records").child(id).get(idtk).val()
 
         dates = get_week()
@@ -188,11 +188,11 @@ class Firebase:
         ax.xaxis.set_major_formatter(formatter)
         locator = md.DayLocator()
         ax.xaxis.set_major_locator(locator)
-        ax.xlabel("Week")
-        ax.ylabel("Number of records")
-        ax.title("Number of Records")
-        ax.ylim(0, total_daily_count + 4)
-        ax.set_axisbelow(True)
+        # ax.xlabel("Week")
+        # ax.ylabel("Number of records")
+        # ax.title("Number of Records")
+        # ax.ylim(0, total_daily_count + 4)
+        # ax.set_axisbelow(True)
         ax.grid(color='w', linestyle='-', linewidth=0.5)
         ax.fill_between(x, y, facecolor='white')
         ax.fill_between(x, y, facecolor= 'yellow', alpha=0.5)
@@ -201,9 +201,9 @@ class Firebase:
 
         buf = BytesIO()
         fig.savefig(buf, format="png")
-        # data = base64.b64encode(buf.getBuffer()).decode('ascii')
-        # return f"<img src='data:image/png;base64, {data}"
-        return buf
+        data = base64.b64encode(buf.getbuffer()).decode('ascii')
+        return data
+        #return buf.getbuffer()
 
 
     # def dayVScalories(self, id, idtk):

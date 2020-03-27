@@ -92,19 +92,6 @@ def get_graph():
         fb_server.dayVSrecords(id=req['userId'], idtk=req['idToken'])
     if req['type'] == 'm':
         fb_server.dayVSmoney(id=req['userId'], idtk=req['idToken'])
-    # if req['type'] == 'c':
-    #     fb_server.dayVScalories(id=req['userId'], idtk=req['idToken'])
-
-    return send_file("basket/%(type)s/%(id)s.png" % {'id': req['userId'], 'type': req['type']})
-
-
-@app.route('/graph', methods=['POST'])
-def get_graph():
-    req = request.form
-    if req['type'] == 'r':
-        fb_server.dayVSrecords(id=req['userId'], idtk=req['idToken'])
-    if req['type'] == 'm':
-        fb_server.dayVSmoney(id=req['userId'], idtk=req['idToken'])
     else:
         req['Even more hacky'] # 4xx
 
@@ -116,13 +103,16 @@ def get_graph_proper():
     req = request.form
     buffer = None
     if req['type'] == 'r':
-        buffer = fb_server.dayVSrecords(id=req['userId'], idtk=req['idToken'])
+        buffer = fb_server.graph_proper(id=req['userId'], idtk=req['idToken'])
     if req['type'] == 'm':
-        buffer = fb_server.dayVSmoney(id=req['userId'], idtk=req['idToken'])
+        buffer = fb_server.graph_proper(id=req['userId'], idtk=req['idToken'])
     else:
         req['Even more hacky'] # 4xx
-
-    return buffer
+    
+    json_data = {
+        'graph': buffer
+    }
+    return json.dumps(json_data)
 if __name__ == '__main__':
     print("Running from __main__")
     app.run(host='0.0.0.0', debug=True, port=8000)
