@@ -88,84 +88,6 @@ class Firebase:
             }
         return res
 
-    def dayVSrecords(self, id, idtk):
-        records = self.db.child("records").child(id).get(idtk).val()
-        
-        dates = get_week()
-        acc_counts = []
-        
-        total_daily_count = 0
-        for day in dates:
-            for record in records.values():
-                try:
-                    recorded_date = record['Time'].split(" ")[0]
-                    if day == recorded_date:
-                        total_daily_count += 1
-                except: 
-                    pass
-            acc_counts.append(total_daily_count)        
-            
-        x = [datetime.datetime.strptime(d, "%Y-%m-%d").date() for d in dates]
-        y = acc_counts
-
-        plt.cla()
-        ax = plt.gca()
-        ax.set_facecolor('xkcd:salmon')
-        formatter = md.DateFormatter("%d")
-        ax.xaxis.set_major_formatter(formatter)
-        locator = md.DayLocator()
-        ax.xaxis.set_major_locator(locator)
-        plt.xlabel("Week")
-        plt.ylabel("Number of records")
-        plt.title("Number of Records")
-        plt.ylim(0, total_daily_count + 4)
-        ax.set_axisbelow(True)
-        plt.grid(color='w', linestyle='-', linewidth=0.5)
-        plt.fill_between(x, y, facecolor='white')
-        plt.fill_between(x, y, facecolor= 'yellow', alpha=0.5)
-        plt.plot(x, y, color='yellow', alpha=0.7)
-        plt.savefig("basket/r/%(id)s.png" % {'id': id})
-        plt.cla()
-
-
-    def dayVSmoney(self, id, idtk):
-        records = self.db.child("records").child(id).get(idtk).val()
-        dates = get_week()
-
-        spents = []
-        total_spent = 0
-        
-        for day in dates:
-            for key, value in records.items():
-                try:
-                    if value['Time'].split(" ")[0] == day:
-                        total_spent += value['Price']
-                except:
-                    pass
-            spents.append(total_spent)
-        
-        x = [datetime.datetime.strptime(d, "%Y-%m-%d").date() for d in dates]
-        y = spents
-        
-        plt.cla()
-        ax = plt.gca()
-        ax.set_facecolor('xkcd:salmon')
-        formatter = md.DateFormatter("%d")
-        ax.xaxis.set_major_formatter(formatter)
-        locator = md.DayLocator()
-        ax.xaxis.set_major_locator(locator)
-        plt.xlabel("Week")
-        plt.ylabel("Total Spent")
-        plt.title("Weekly Total Spent")
-        plt.ylim(0, total_spent + 5)
-        ax.set_axisbelow(True)
-        plt.grid(color='w', linestyle='-', linewidth=0.5)
-        plt.fill_between(x, y, facecolor='white')
-        plt.fill_between(x, y, facecolor='green', alpha=0.5)
-        plt.plot(x, y, color='green', alpha=0.7)
-        plt.savefig("basket/m/%(id)s.png" % {'id': id})
-        plt.cla()
-
     def graph_days_vs_record(self, id, idtk):
         records = self.db.child("records").child(id).get(idtk).val()
 
@@ -185,6 +107,7 @@ class Firebase:
 
         x = [datetime.datetime.strptime(d, "%Y-%m-%d").date() for d in dates]
         y = acc_counts
+        
 
         fig = Figure()
         ax = fig.subplots()
@@ -250,18 +173,15 @@ class Firebase:
         buffer.seek(0)
         return buffer
     
-
-
-    #
-    # def send_pw_reset_email(self, email):
-    #     return self.auth.send_password_reset_email(email)
-    #
-    # def encode_email(self, email):
-    #     utf_email = email.encode('utf-8')
-    #     return base64.b64encode(utf_email)
-    #
-    # def decode_email(self, encoded_email):
-    #     return encoded_email.decode('utf-8')
+    def send_pw_reset_email(self, email):
+        return self.auth.send_password_reset_email(email)
+    
+    def encode_email(self, email):
+        utf_email = email.encode('utf-8')
+        return base64.b64encode(utf_email)
+    
+    def decode_email(self, encoded_email):
+        return encoded_email.decode('utf-8')
 
 
 if __name__ == '__main__':

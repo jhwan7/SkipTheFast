@@ -85,17 +85,6 @@ def get_goal():
     return json_data
 
 
-@app.route('/test_graph', methods=['POST'])
-def get_graph():
-    req = request.form
-    if req['type'] == 'r':
-        fb_server.dayVSrecords(id=req['userId'], idtk=req['idToken'])
-    if req['type'] == 'm':
-        fb_server.dayVSmoney(id=req['userId'], idtk=req['idToken'])
-        
-    return send_file("basket/%(type)s/%(id)s.png" % {'id': req['userId'], 'type': req['type']})
-
-
 @app.route('/graph', methods=['POST'])
 def get_graph_proper():
     req = request.form
