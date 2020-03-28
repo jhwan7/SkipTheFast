@@ -36,6 +36,7 @@ class AppInstrumentedTest {
         }
     }
 
+
     lateinit var mainActivity: MainActivity;
 
     @Before
@@ -47,7 +48,7 @@ class AppInstrumentedTest {
      * Test to check if the card got properly created with user survey data input.
      */
     @Test
-    fun tabsActivity() {
+    fun testCardViewCreated() {
         val userSurveyData: UserSurvey
 
         // Creating test object
@@ -68,3 +69,4 @@ class AppInstrumentedTest {
         assertNotNull(newCard)
     }
 }
+

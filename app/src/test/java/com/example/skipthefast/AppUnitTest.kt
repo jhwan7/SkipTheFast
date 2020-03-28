@@ -1,6 +1,7 @@
 package com.example.skipthefast
 
 import android.content.Context
+import android.util.Log
 import com.example.skipthefast.Data.UserSurvey
 import org.apache.commons.lang3.builder.EqualsBuilder
 import org.json.JSONObject
@@ -44,6 +45,25 @@ class AppUnitTest {
         expectedUserSurvey.date = timeNow
 
         Assert.assertTrue(EqualsBuilder.reflectionEquals(expectedUserSurvey, userSurveyToTest));
+    }
+
+    @Test
+    fun CalendarDateConversion( ) {
+        val jsonDateResponse = JSONObject("{\"2020-03-20 03:48:18\":{\"Category\":\"meat\",\"Exercise\":\"walk\",\"Feeling\":\"2\",\"Food Chain\":\"MC\",\"Item\":\"bigMac\",\"Price\":2},\"2020-03-21 03:48:58\":{\"Category\":\"meat\",\"Exercise\":\"run\",\"Feeling\":\"5\",\"Food Chain\":\"MC\",\"Item\":\"bigMac\",\"Price\":6.45}}")
+        val keys = jsonDateResponse.names()
+
+        val expectedDate1 = "2020-03-20"
+        val expectedDate2 = "2020-03-21"
+
+        val data = mutableListOf<String>()
+        for (i in 0 until jsonDateResponse.length()) {
+            Log.i("Calendar", keys.get(i).toString())
+            data.add(keys.get(i).toString().split(" ")[0])
+
+        }
+        Assert.assertEquals(expectedDate1, data[0])
+        Assert.assertEquals(expectedDate2, data[1])
+
     }
 
 }
