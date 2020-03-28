@@ -4,6 +4,10 @@ import CONST
 import matplotlib.pyplot as plt
 import matplotlib.dates as md
 
+from matplotlib.figure import Figure
+from io import BytesIO
+import io
+import base64
 
 class AttemptToDuplicateFirebase(Exception): pass
 
@@ -78,14 +82,18 @@ class Firebase:
 
     def get_goal(self, id, idtk):
         res = self.db.child('users').child(id).child('goal').get(idtk).val()
+        if res == None:
+            return {
+                "Goal":"None"
+            }
         return res
 
-    def dayVSrecords(self, id, idtk):
+    def graph_days_vs_record(self, id, idtk):
         records = self.db.child("records").child(id).get(idtk).val()
-        
-        dates = get_week();
+
+        dates = get_week()
         acc_counts = []
-        
+
         total_daily_count = 0
         for day in dates:
             for record in records.values():
@@ -93,34 +101,38 @@ class Firebase:
                     recorded_date = record['Time'].split(" ")[0]
                     if day == recorded_date:
                         total_daily_count += 1
-                except: 
+                except:
                     pass
-            acc_counts.append(total_daily_count)        
-            
+            acc_counts.append(total_daily_count)
+
         x = [datetime.datetime.strptime(d, "%Y-%m-%d").date() for d in dates]
         y = acc_counts
+        
 
-        plt.cla()
-        ax = plt.gca()
+        fig = Figure()
+        ax = fig.subplots()
         ax.set_facecolor('xkcd:salmon')
         formatter = md.DateFormatter("%d")
         ax.xaxis.set_major_formatter(formatter)
         locator = md.DayLocator()
         ax.xaxis.set_major_locator(locator)
-        plt.xlabel("Week")
-        plt.ylabel("Number of records")
-        plt.title("Number of Records")
-        plt.ylim(0, total_daily_count + 4)
+        ax.set_xlabel("Week")
+        ax.set_ylabel("Number of records")
+        ax.set_title("Number of Records")
+        ax.set_ylim(0, total_daily_count + 4)
         ax.set_axisbelow(True)
-        plt.grid(color='w', linestyle='-', linewidth=0.5)
-        plt.fill_between(x, y, facecolor='white')
-        plt.fill_between(x, y, facecolor= 'yellow', alpha=0.5)
-        plt.plot(x, y, color='yellow', alpha=0.7)
-        plt.savefig("basket/r/%(id)s.png" % {'id': id})
-        plt.cla()
+        ax.grid(color='w', linestyle='-', linewidth=0.5)
+        ax.fill_between(x, y, facecolor='white')
+        ax.fill_between(x, y, facecolor= 'yellow', alpha=0.5)
+        ax.plot(x, y, color='yellow', alpha=0.7)
 
-
-    def dayVSmoney(self, id, idtk):
+        buffer = BytesIO()
+        fig.savefig(buffer, format="png")
+        buffer.seek(0)
+        return buffer
+        
+        
+    def graph_days_vs_spent(self, id, idtk):
         records = self.db.child("records").child(id).get(idtk).val()
         dates = get_week()
 
@@ -139,61 +151,37 @@ class Firebase:
         x = [datetime.datetime.strptime(d, "%Y-%m-%d").date() for d in dates]
         y = spents
         
-        plt.cla()
-        ax = plt.gca()
+        fig = Figure()
+        ax = fig.gca()
         ax.set_facecolor('xkcd:salmon')
         formatter = md.DateFormatter("%d")
         ax.xaxis.set_major_formatter(formatter)
         locator = md.DayLocator()
         ax.xaxis.set_major_locator(locator)
-        plt.xlabel("Week")
-        plt.ylabel("Total Spent")
-        plt.title("Weekly Total Spent")
-        plt.ylim(0, total_spent + 5)
+        ax.set_xlabel("Week")
+        ax.set_ylabel("Total Spent")
+        ax.set_title("Weekly Total Spent")
+        ax.set_ylim(0, total_spent + 5)
         ax.set_axisbelow(True)
-        plt.grid(color='w', linestyle='-', linewidth=0.5)
-        plt.fill_between(x, y, facecolor='white')
-        plt.fill_between(x, y, facecolor='green', alpha=0.5)
-        plt.plot(x, y, color='green', alpha=0.7)
-        plt.savefig("basket/m/%(id)s.png" % {'id': id})
-        plt.cla()
+        ax.grid(color='w', linestyle='-', linewidth=0.5)
+        ax.fill_between(x, y, facecolor='white')
+        ax.fill_between(x, y, facecolor='green', alpha=0.5)
+        ax.plot(x, y, color='green', alpha=0.7)
 
-
-    # def dayVScalories(self, id, idtk):
-    #     records = self.db.child("records").child(id).get(idtk).val()
-    #     week = get_week()
-    #     x = []
-    #     y = []
-    #     for day in week:
-    #         dailyCalories = 0
-    #         for key, value in records.items():
-    #             if value['Time'].split(" ")[0] == day:
-    #                 dailyCalories += value['Calories']
-    #         x.append(day)
-    #         y.append(dailyCalories)
-
-    #     ax = plt.gca()
-    #     formatter = md.DateFormatter("%d")
-    #     ax.xaxis.set_major_formatter(formatter)
-    #     locator = md.DayLocator()
-    #     ax.xaxis.set_major_locator(locator)
-    #     plt.xlabel("Week")
-    #     plt.ylabel("Total spent")
-    #     plt.title("Total Spent")
-    #     plt.ylim(0)
-    #     plt.plot(x, y)
-    #     plt.savefig("basket/c/%(id)s.png" % {'id': id})
-
-    #
-    # def send_pw_reset_email(self, email):
-    #     return self.auth.send_password_reset_email(email)
-    #
-    # def encode_email(self, email):
-    #     utf_email = email.encode('utf-8')
-    #     return base64.b64encode(utf_email)
-    #
-    # def decode_email(self, encoded_email):
-    #     return encoded_email.decode('utf-8')
+        buffer = BytesIO()
+        fig.savefig(buffer, format="png")
+        buffer.seek(0)
+        return buffer
+    
+    def send_pw_reset_email(self, email):
+        return self.auth.send_password_reset_email(email)
+    
+    def encode_email(self, email):
+        utf_email = email.encode('utf-8')
+        return base64.b64encode(utf_email)
+    
+    def decode_email(self, encoded_email):
+        return encoded_email.decode('utf-8')
 
 
 if __name__ == '__main__':
