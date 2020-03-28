@@ -10,6 +10,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.runners.MockitoJUnitRunner
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -57,12 +58,25 @@ class AppUnitTest {
 
         val data = mutableListOf<String>()
         for (i in 0 until jsonDateResponse.length()) {
-            Log.i("Calendar", keys.get(i).toString())
             data.add(keys.get(i).toString().split(" ")[0])
 
         }
         Assert.assertEquals(expectedDate1, data[0])
         Assert.assertEquals(expectedDate2, data[1])
+
+    }
+    @Test
+    fun ConvertNumericalMonthToString() {
+
+        val exampleDates = listOf<Number>(969681600000, 964324800000, 948603600000, 974955600000 )
+        val month = mutableListOf<String>()
+        for(i in 0 until exampleDates.size) {
+            month.add(SimpleDateFormat("MMM", Locale.ENGLISH).format(exampleDates[i]))
+        }
+        Assert.assertEquals(month[0], "Sep")
+        Assert.assertEquals(month[1], "Jul")
+        Assert.assertEquals(month[2], "Jan")
+        Assert.assertEquals(month[3], "Nov")
 
     }
 
