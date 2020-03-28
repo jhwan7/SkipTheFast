@@ -173,7 +173,8 @@ class Notify : AppCompatActivity() {
                             // END
                             println("Returning to Main")
                             // Return to main activity
-
+                            val nextState = Intent(this, MainActivity::class.java)
+                            startActivityForResult(nextState, 1);
                         }
 
                     }
