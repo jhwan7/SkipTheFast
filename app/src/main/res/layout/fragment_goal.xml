@@ -25,25 +25,36 @@
                 android:textSize="45sp"
                 app:fontFamily="@font/montserrat_bold" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/goalTextInput"
-                android:layout_width="match_parent"
-                android:layout_height="201dp"
-                android:textSize="25sp"
+            <TextView
+                android:id="@+id/textView10"
+                android:text="Goal (required)"
+                android:layout_marginBottom="6dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/goalTextInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+
                 android:layout_marginBottom="24dp"
-                android:hint="Ex) I'm going to use $50 a week!" />
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:hint="EX) My goal is to spend less than $50 per week!" />
 
             <TextView
                 android:id="@+id/textView8"
-                android:text="Desired Frequency"
+                android:text="Desired Frequency (required)"
                 android:layout_marginLeft="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <EditText
-                android:id="@+id/frequencyGoal"
+                android:id="@+id/frequencyGoalT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
@@ -54,7 +65,7 @@
 
             <TextView
                 android:id="@+id/textView9"
-                android:text="Desired Cost Limit"
+                android:text="Desired Cost Limit (required)"
                 android:layout_marginLeft="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

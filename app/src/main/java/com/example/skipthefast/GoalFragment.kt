@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.annotation.RequiresApi
 import com.example.skipthefast.ServerConnection.UserServer
 import kotlinx.android.synthetic.main.fragment_goal.*
@@ -33,7 +34,14 @@ class GoalFragment : Fragment() {
             UserServer.getGoal(fun(res) {
                 try {
                     val data = JSONObject(res.body()!!.string())
-                    goalTextInput.setText(data.get("Goal").toString())
+                    val text = data.get("Goal").toString()
+                    if(text != "None") {
+                        val goals = text.split("&&&&")
+                        getView()!!.findViewById<EditText>(R.id.costGoalT).setText(goals[2])
+                        getView()!!.findViewById<EditText>(R.id.frequencyGoalT).setText(goals[1])
+                        getView()!!.findViewById<EditText>(R.id.goalTextInput).setText(goals[0])
+
+                    }
                 } catch (ex: Exception) {
                     println("Error getting goal");
                 }
@@ -43,7 +51,7 @@ class GoalFragment : Fragment() {
 
         updateBtn.setOnClickListener{view ->
             val goal = goalTextInput.text.toString()
-            val frequencyGoal = frequencyGoal.text.toString()
+            val frequencyGoal = frequencyGoalT.text.toString()
             val costGoal = costGoalT.text.toString()
             Thread(Runnable {
                 UserServer.pushGoal(goal + "&&&&" + frequencyGoal + "&&&&" + costGoal, fun(res) {
