@@ -3,8 +3,14 @@ package com.example.skipthefast
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -67,6 +73,21 @@ class AppInstrumentedTest {
         val newCard: ViewGroup = Card(mainActivity, userSurveyData).getCard()
 
         assertNotNull(newCard)
+    }
+
+    @Test
+    fun checkIfFabIsShown() {
+        val activityScenario = ActivityScenario.launch(MainActivity::class.java)
+        onView(withId(R.id.fab)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    }
+
+    @Test
+    fun checkTransition() {
+        Intents.init()
+        val activityScenario = ActivityScenario.launch(MainActivity::class.java)
+        onView(withId(R.id.fab)).perform(click())
+        intended(hasComponent(FormActivity::class.java.name))
+        Intents.release()
     }
 }
 
