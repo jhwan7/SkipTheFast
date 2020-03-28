@@ -81,4 +81,13 @@ def test_push_goal(test_client):
 
 
 def test_get_graph(test_client):
-    assert True
+    auth_response = test_client.post('/login', data={'email': 'test@a123.com', 'password': 'test1234'})
+    assert auth_response.status_code == 200
+    auth_json = json.loads(auth_response.data)
+    idtk = auth_json['idToken']
+    id = auth_json['userId']
+
+    data_response = test_client.post('/data', data={'userId': id, 'idToken': idtk, 'Goal':'Push up every day', 'type':'r'})
+    assert data_response.status_code == 200
+    data_response = test_client.post('/data', data={'userId': id, 'idToken': idtk, 'Goal': 'Push up every day', 'type': 'm'})
+    assert data_response.status_code == 200

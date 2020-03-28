@@ -86,18 +86,18 @@ def get_goal():
 
 
 @app.route('/graph', methods=['POST'])
-def get_graph():
+def get_graph_proper():
     req = request.form
+    buffer = None
     if req['type'] == 'r':
-        fb_server.dayVSrecords(id=req['userId'], idtk=req['idToken'])
+        buffer = fb_server.graph_days_vs_record(id=req['userId'], idtk=req['idToken'])
     if req['type'] == 'm':
-        fb_server.dayVSmoney(id=req['userId'], idtk=req['idToken'])
-    # if req['type'] == 'c':
-    #     fb_server.dayVScalories(id=req['userId'], idtk=req['idToken'])
+        buffer = fb_server.graph_days_vs_spent(id=req['userId'], idtk=req['idToken'])
 
-    return send_file("basket/%(type)s/%(id)s.png" % {'id': req['userId'], 'type': req['type']})
-
-
+    return send_file(buffer, as_attachment=True, attachment_filename='graph.png', mimetype = 'image/png')
+    
+    
+    
 if __name__ == '__main__':
     print("Running from __main__")
     app.run(host='0.0.0.0', debug=True, port=8000)
