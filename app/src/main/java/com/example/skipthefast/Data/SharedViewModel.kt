@@ -34,13 +34,13 @@ class SharedViewModel {
         return this.frequencyGoal
     }
     fun getCostGoal(): Float {
-        return this.costGoal
+        return return String.format("%.2f", this.costGoal).toFloat()
     }
     fun getFrequencyUser(): Int {
         return this.frequencyUser
     }
     fun getCostUser(): Float {
-        return this.costUser
+        return return String.format("%.2f", this.costUser).toFloat()
     }
 
 

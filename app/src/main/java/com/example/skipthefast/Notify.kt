@@ -126,15 +126,13 @@ class Notify : AppCompatActivity() {
                                     .setStyle(
                                         Notification.BigTextStyle().bigText(
                                             "Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                                                    "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${sharedViewModel.getCostGoal().minus(
-                                                        sharedViewModel.getCostUser()
+                                                    "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${String.format("%.2f", sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())
                                                     )} left to spend"
                                         )
                                     )
                                     .setContentText(
                                         "Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                                                "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${sharedViewModel.getCostGoal().minus(
-                                                    sharedViewModel.getCostUser()
+                                                "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${String.format("%.2f", sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())
                                                 )} left to spend"
                                     )
                                     // Set the intent that will fire when the user taps the notification
@@ -153,15 +151,13 @@ class Notify : AppCompatActivity() {
                                     .setStyle(
                                         Notification.BigTextStyle().bigText(
                                             "Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                                                    "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${sharedViewModel.getCostGoal().minus(
-                                                        sharedViewModel.getCostUser()
+                                                    "You have spent total ${'$'} ${sharedViewModel.getCostUser()} you have ${'$'} ${String.format("%.2f", sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())
                                                     )} left to spend"
                                         )
                                     )
                                     .setContentText(
                                         "Your goal was ${sharedViewModel.getFrequencyGoal()} times/week and you have reached ${sharedViewModel.getFrequencyUser()}\n" +
-                                                "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${sharedViewModel.getCostGoal().minus(
-                                                    sharedViewModel.getCostUser()
+                                                "You have spent total ${'$'}${sharedViewModel.getCostUser()} you have ${'$'}${String.format("%.2f", sharedViewModel.getCostGoal().minus(sharedViewModel.getCostUser())
                                                 )} left to spend"
                                     )
                                     // Set the intent that will fire when the user taps the notification

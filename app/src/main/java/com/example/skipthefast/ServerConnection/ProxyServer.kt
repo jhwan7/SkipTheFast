@@ -8,7 +8,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 open class ProxyServer {
-    protected val SERVER_URL = "http://35.182.228.42:8000"
+    protected val SERVER_URL = "http://35.182.154.14:8000"
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun testConnection(){
